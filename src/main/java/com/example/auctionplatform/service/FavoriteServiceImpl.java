@@ -30,7 +30,9 @@ public class FavoriteServiceImpl {
         }
         return null;
     }
-
+    public List<FavoriteDTO> getFavoritesByUserId(int userId) {
+        return FavoriteConverter.convertFavorites(favoriteRepository.findByUserId(userId));
+    }
     public List<FavoriteDTO> getAllFavorites() {
         return FavoriteConverter.convertFavorites(favoriteRepository.findAll());
     }

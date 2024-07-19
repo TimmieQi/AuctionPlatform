@@ -1,6 +1,7 @@
 package com.example.auctionplatform.service;
 
 import com.example.auctionplatform.converter.AddressConverter;
+import com.example.auctionplatform.converter.AuctionItemConverter;
 import com.example.auctionplatform.dao.Address;
 import com.example.auctionplatform.dao.AddressRepository;
 import com.example.auctionplatform.dto.AddressDTO;
@@ -56,5 +57,8 @@ public class AddressServiceImpl {
     public Address getAddress(int id) {
         Optional<Address> optionalAddress = addressRepository.findById(id);
         return optionalAddress.orElse(null);
+    }
+    public List<AddressDTO> getAddressesByUserId(int userId){
+        return AddressConverter.convertAddresses(addressRepository.findByUserId(userId));
     }
 }

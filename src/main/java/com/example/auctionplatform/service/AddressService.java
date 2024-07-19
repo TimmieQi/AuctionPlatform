@@ -2,6 +2,7 @@ package com.example.auctionplatform.service;
 
 import com.example.auctionplatform.dao.Address;
 import com.example.auctionplatform.dto.AddressDTO;
+import com.example.auctionplatform.dto.AuctionItemDTO;
 
 import java.util.List;
 
@@ -28,4 +29,8 @@ public interface AddressService  {
      * @return
      */
     public String updateAddressById(AddressDTO newAddress);
+    /**
+     * 根据id显示商家所有地址
+     */
+    public List<AddressDTO> getAddressesByUserId(int userId);
 }

@@ -28,4 +28,5 @@ public interface FavoriteService {
     /**
      * 根据id获取其所有收藏
      */
+    public List<FavoriteDTO> getFavoritesByUserId(int userId);
 }
