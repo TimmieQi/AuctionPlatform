@@ -1,9 +1,6 @@
 package com.example.auctionplatform.dao;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -11,6 +8,7 @@ import java.util.Date;
 @Table(name = "AuctionItem")
 public class AuctionItem {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="id")
     private int id;
     @Column(name ="des")
@@ -29,6 +27,16 @@ public class AuctionItem {
     private Date uploadTime;
     @Column(name ="auctionTime")
     private Date auctionTime;
+    @Column(name ="favorite_sum")
+    private int favoriteSum;
+
+    public int getFavoriteSum() {
+        return favoriteSum;
+    }
+
+    public void setFavoriteSum(int favoriteSum) {
+        this.favoriteSum = favoriteSum;
+    }
 
     public int getUserId() {
         return userId;

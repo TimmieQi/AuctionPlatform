@@ -1,14 +1,12 @@
 package com.example.auctionplatform.dao;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name ="order")
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     @Column(name = "sale_id")
@@ -25,6 +23,9 @@ public class Order {
     private String buyAdd;
     @Column(name ="isReceived")
     private boolean isReceived;
+    /**
+     * 物流信息
+     */
     @Column(name ="message")
     private String message;
 

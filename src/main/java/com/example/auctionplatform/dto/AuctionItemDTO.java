@@ -1,6 +1,5 @@
 package com.example.auctionplatform.dto;
 
-import jakarta.persistence.Column;
 
 import java.util.Date;
 
@@ -18,6 +17,15 @@ public class AuctionItemDTO {
     private Date uploadTime;
 
     private Date auctionTime;
+    private int favoriteSum;
+
+    public int getFavoriteSum() {
+        return favoriteSum;
+    }
+
+    public void setFavoriteSum(int favoriteSum) {
+        this.favoriteSum = favoriteSum;
+    }
 
     public int getUserId() {
         return userId;

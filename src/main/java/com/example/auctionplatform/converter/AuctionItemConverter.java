@@ -18,6 +18,7 @@ public class AuctionItemConverter {
         auctionItem.setState(auctionItemDTO.getState());
         auctionItem.setUploadTime(auctionItemDTO.getUploadTime());
         auctionItem.setAuctionTime(auctionItemDTO.getAuctionTime());
+        auctionItem.setFavoriteSum(auctionItemDTO.getFavoriteSum());
         return auctionItem;
     }
     public static AuctionItemDTO convertAuctionItem(AuctionItem auctionItem) {
@@ -31,6 +32,7 @@ public class AuctionItemConverter {
         auctionItemDTO.setState(auctionItem.getState());
         auctionItemDTO.setUploadTime(auctionItem.getUploadTime());
         auctionItemDTO.setAuctionTime(auctionItem.getAuctionTime());
+        auctionItemDTO.setFavoriteSum(auctionItem.getFavoriteSum());
         return auctionItemDTO;
     }
     public static List<AuctionItem> convertAuctionItemDTOs(List<AuctionItemDTO> AuctionItemDTOS) {
