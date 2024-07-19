@@ -36,4 +36,6 @@ public interface UserService {
      * 返回一个List，包含所有的User，数据量大请慎用
      */
     List<User> getAllUser();
+
+    String updateUser(UserDTO userDTO);
 }

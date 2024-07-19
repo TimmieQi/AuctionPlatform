@@ -52,4 +52,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
+
+    @Override
+    public String updateUser(UserDTO userDTO) {
+        return "";
+    }
 }
