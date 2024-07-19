@@ -21,7 +21,7 @@ public class FavoriteServiceImpl {
     public FavoriteServiceImpl(FavoriteRepository favoriteRepository) {
         this.favoriteRepository=favoriteRepository;
     }
-    private FavoriteRepository favoriteRepository;
+    private final FavoriteRepository favoriteRepository;
     public FavoriteRepository getFavoriteRepositoryById(int id) {
         Optional<Favorite> favorite=favoriteRepository.findById(id);
         if(favorite.isPresent()) {
@@ -41,10 +41,10 @@ public class FavoriteServiceImpl {
         List<Favorite> favorite_uid=favoriteRepository.findByUserId(newfavoriteDTO.getUserId());
         if(!favorite_uid.isEmpty()) {
             for(Favorite favorite:favorite_uid) {
-            if(favorite.getId()==newfavoriteDTO.getItemId()) {
-                return "Favorite already exists";
+                if(favorite.getId()==newfavoriteDTO.getItemId()) {
+                    return "Favorite already exists";
+                }
             }
-        }
         }
         Favorite favorite= FavoriteConverter.convertFavoriteDTO(newfavoriteDTO);
         favoriteRepository.save(favorite);

@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
         }
         tempUser = userRepository.findByPhone(newUser.getPhone());
         if (tempUser != null) {
-            return "User that uses phone number \""+newUser.getEmail()+"\" already exists";
+            return "User that uses phone number \""+newUser.getPhone()+"\" already exists";
         }
         tempUser = UserConverter.convertUserDTO(newUser);
         userRepository.save(tempUser);//确认是新的用户，存入
@@ -43,9 +43,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(int id) {
+    public UserDTO getUserById(int id) {
         Optional<User> tempUser = userRepository.findById(id);
-        return tempUser.orElse(null);
+        return tempUser.map(UserConverter::convertUser).orElse(null);
     }
 
     @Override
@@ -54,7 +54,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUser(UserDTO userDTO) {
+    public String updateUser(int id,String nickname,String phone,String password,String email) {
+        Optional<User> tempUser = userRepository.findById(id);
+        if(tempUser.isEmpty()) {
+            return "User with id \""+id+"\" not found";
+        }
+        String message = "";
+        if(!nickname.isEmpty()) {
+            tempUser.get().setNickname(nickname);
+            message += "Nickname set to \""+nickname+"\"";
+        }
+        if(!phone.isEmpty()) {
+            tempUser.get().setPhone(phone);
+            message += "Phone set to \""+phone+"\"";
+        }
+        if(!password.isEmpty()) {
+            tempUser.get().setPassword(password);
+        }
+        if(!email.isEmpty()) {
+            tempUser.get().setEmail(email);
+        }
+        userRepository.save(tempUser.get());
+        return "";
+    }
+
+    @Override
+    public String grantAdminById(int id) {
+        return "";
+    }
+
+    @Override
+    public String revokeAdminById(int id) {
         return "";
     }
 }

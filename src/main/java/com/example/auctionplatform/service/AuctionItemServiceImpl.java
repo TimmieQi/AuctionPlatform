@@ -24,10 +24,7 @@ public class AuctionItemServiceImpl {
     private final AuctionItemRepository auctionItemRepository;
     public AuctionItem getAuctionItem(int id){
         Optional<AuctionItem> optionalAuctionItem=auctionItemRepository.findById(id);//为啥要变成long啊
-        if(optionalAuctionItem.isPresent()){
-            return optionalAuctionItem.get();
-        }
-        return null;
+        return optionalAuctionItem.orElse(null);
     }
 //    public List<AuctionItem> getAllAuctionItems(){
 //

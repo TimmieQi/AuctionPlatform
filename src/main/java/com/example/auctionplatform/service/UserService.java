@@ -30,12 +30,16 @@ public interface UserService {
      * @return
      * 如果存在，返回对应用户
      */
-    User getUserById(int id);
+    UserDTO getUserById(int id);
 
     /**
      * 返回一个List，包含所有的User，数据量大请慎用
      */
     List<User> getAllUser();
 
-    String updateUser(UserDTO userDTO);
+    String updateUser(int id,String nickname,String phone,String password,String email);
+
+    String grantAdminById(int id);
+
+    String revokeAdminById(int id);
 }

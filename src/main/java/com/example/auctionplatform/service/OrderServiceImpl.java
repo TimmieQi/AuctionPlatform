@@ -43,9 +43,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderById(int id) {
+    public OrderDTO getOrderById(int id) {
         Optional<Order> tempOrder = orderRepository.findById(id);
-        return tempOrder.orElse(null);
+        return tempOrder.map(OrderConverter::convertOrder).orElse(null);
     }
 
     @Override

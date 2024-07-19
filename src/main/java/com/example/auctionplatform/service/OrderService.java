@@ -19,7 +19,7 @@ public interface OrderService {
     /**
      * 获得对应id的order
      */
-    Order getOrderById(int id);
+    OrderDTO getOrderById(int id);
 
     /**
      * 获得所有order

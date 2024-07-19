@@ -24,7 +24,7 @@ public class AddressServiceImpl {
     public AddressServiceImpl(AddressRepository addressRepository) {
         this.addressRepository = addressRepository;
     }
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
     public String deleteAddressById(int id){
         Optional<Address> optionalAddress = addressRepository.findById(id);
         if (optionalAddress.isPresent()) {
@@ -43,9 +43,6 @@ public class AddressServiceImpl {
 
     public Address getAddress(int id) {
         Optional<Address> optionalAddress = addressRepository.findById(id);
-        if (optionalAddress.isPresent()) {
-            return optionalAddress.get();
-        }
-        return null;
+        return optionalAddress.orElse(null);
     }
 }
