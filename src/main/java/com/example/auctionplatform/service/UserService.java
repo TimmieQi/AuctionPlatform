@@ -1,5 +1,4 @@
 package com.example.auctionplatform.service;
-import com.example.auctionplatform.dao.User;
 import com.example.auctionplatform.dto.UserDTO;
 
 
@@ -35,11 +34,29 @@ public interface UserService {
     /**
      * 返回一个List，包含所有的User，数据量大请慎用
      */
-    List<User> getAllUser();
+    List<UserDTO> getAllUser();
 
+    /**
+     * 修改对应id的用户的字段，如果对应字段为空或与原来相同，则不修改,并将信息写入日志中
+     */
     String updateUser(int id,String nickname,String phone,String password,String email);
 
+    /**
+     * 提升某个用户的权限到管理员，并将信息写入日志中
+     */
     String grantAdminById(int id);
-
+    /**
+     * 收回某个用户的权限的管理员，并将信息写入日志中
+     */
     String revokeAdminById(int id);
+
+    /**
+     * 给对应id账户提供数值为amount的金钱（单位：RMB）
+     */
+    String raiseMoney(int id, double amount);
+
+    /**
+     * 给对应id的账户扣除数值为amount的金钱（单位：RMB）
+     */
+    String decreaseMoney(int id, double amount);
 }

@@ -1,7 +1,8 @@
 package com.example.auctionplatform.service;
 
-import com.example.auctionplatform.dao.Order;
+
 import com.example.auctionplatform.dto.OrderDTO;
+
 
 import java.util.List;
 
@@ -24,5 +25,9 @@ public interface OrderService {
     /**
      * 获得所有order
      */
-    List<Order> getAllOrders();
+    List<OrderDTO> getAllOrders();
+
+    String updateOrderById(OrderDTO order);
+
+    List<OrderDTO> getOrdersByUserId(int userId);
 }
