@@ -9,12 +9,12 @@ import jakarta.persistence.Table;
 @Table(name ="address")
 public class Address {
     @Id
+    @Column(name ="address_id")
+    private int addressId;
     @Column(name ="user_id")
     private int userId;
     @Column(name ="address")
     private String address;
-    @Column(name ="address_id")
-    private int addressId;
 
     public int getUserId() {
         return userId;
