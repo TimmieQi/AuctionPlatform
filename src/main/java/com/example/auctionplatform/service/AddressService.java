@@ -2,6 +2,7 @@ package com.example.auctionplatform.service;
 
 import com.example.auctionplatform.dao.Address;
 import com.example.auctionplatform.dto.AddressDTO;
+import com.example.auctionplatform.dto.AuctionItemDTO;
 
 import java.util.List;
 
@@ -22,4 +23,14 @@ public interface AddressService  {
      */
     public String deleteAddressById(int id);
 
+    /**
+     * 导入类后判断id，然后判断是否需要更改，不能设置非空，导入之前的默认值，该多少是多少，只能改Address
+     * @param newAddress
+     * @return
+     */
+    public String updateAddressById(AddressDTO newAddress);
+    /**
+     * 根据id显示商家所有地址
+     */
+    public List<AddressDTO> getAddressesByUserId(int userId);
 }

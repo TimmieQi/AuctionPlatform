@@ -30,8 +30,11 @@ public class FavoriteServiceImpl {
         }
         return null;
     }
-    public List<Favorite> getAllFavorites() {
-        return favoriteRepository.findAll();
+    public List<FavoriteDTO> getFavoritesByUserId(int userId) {
+        return FavoriteConverter.convertFavorites(favoriteRepository.findByUserId(userId));
+    }
+    public List<FavoriteDTO> getAllFavorites() {
+        return FavoriteConverter.convertFavorites(favoriteRepository.findAll());
     }
     public String deleteFavoriteById(int id){
         Optional<Favorite> favorite=favoriteRepository.findById(id);

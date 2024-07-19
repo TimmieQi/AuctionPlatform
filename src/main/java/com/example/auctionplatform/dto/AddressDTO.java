@@ -1,8 +1,7 @@
 package com.example.auctionplatform.dto;
 
-import jakarta.persistence.Column;
-
 public class AddressDTO {
+    public static short AUCTION_ITEM_STATE_NOT_CHANGE = -2;
     private int userId;
     private String address;
     private int addressId;
