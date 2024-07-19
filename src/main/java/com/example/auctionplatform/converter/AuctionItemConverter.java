@@ -3,6 +3,9 @@ package com.example.auctionplatform.converter;
 import com.example.auctionplatform.dao.AuctionItem;
 import com.example.auctionplatform.dto.AuctionItemDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AuctionItemConverter {
     public static AuctionItem convertAuctionItemDTO(AuctionItemDTO auctionItemDTO) {
         AuctionItem auctionItem = new AuctionItem();
@@ -29,5 +32,19 @@ public class AuctionItemConverter {
         auctionItemDTO.setUploadTime(auctionItem.getUploadTime());
         auctionItemDTO.setAuctionTime(auctionItem.getAuctionTime());
         return auctionItemDTO;
+    }
+    public static List<AuctionItem> convertAuctionItemDTOs(List<AuctionItemDTO> AuctionItemDTOS) {
+        List<AuctionItem> AuctionItemList = new ArrayList<>();
+        for (AuctionItemDTO AuctionItemDTO : AuctionItemDTOS) {
+            AuctionItemList.add(convertAuctionItemDTO(AuctionItemDTO));
+        }
+        return AuctionItemList;
+    }
+    public static List<AuctionItemDTO> convertAuctionItems(List<AuctionItem> AuctionItemS) {
+        List<AuctionItemDTO> AuctionItemDTOList = new ArrayList<>();
+        for (AuctionItem AuctionItem : AuctionItemS) {
+            AuctionItemDTOList.add(convertAuctionItem(AuctionItem));
+        }
+        return AuctionItemDTOList;
     }
 }

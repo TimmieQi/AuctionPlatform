@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
         }
         tempUser = userRepository.findByPhone(newUser.getPhone());
         if (tempUser != null) {
-            return "User that uses phone number \""+newUser.getEmail()+"\" already exists";
+            return "User that uses phone number \""+newUser.getPhone()+"\" already exists";
         }
         tempUser = UserConverter.convertUserDTO(newUser);
         userRepository.save(tempUser);//确认是新的用户，存入

@@ -7,6 +7,7 @@ import com.example.auctionplatform.dto.AuctionItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -24,14 +25,11 @@ public class AuctionItemServiceImpl {
     private final AuctionItemRepository auctionItemRepository;
     public AuctionItem getAuctionItem(int id){
         Optional<AuctionItem> optionalAuctionItem=auctionItemRepository.findById(id);//为啥要变成long啊
-        if(optionalAuctionItem.isPresent()){
-            return optionalAuctionItem.get();
-        }
-        return null;
+        return optionalAuctionItem.orElse(null);
     }
-//    public List<AuctionItem> getAllAuctionItems(){
-//
-//    }
+    public List<AuctionItem> getAllAuctionItems(){
+        return  auctionItemRepository.findAll();
+    }
     public String  addAuctionItem(AuctionItemDTO newAuctionItemDTO){
         AuctionItem AuctionItem = AuctionItemConverter.convertAuctionItemDTO(newAuctionItemDTO);
         auctionItemRepository.save(AuctionItem);

@@ -3,6 +3,10 @@ package com.example.auctionplatform.converter;
 import com.example.auctionplatform.dao.Order;
 import com.example.auctionplatform.dto.OrderDTO;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class OrderConverter {
     public static Order convertOrderDTO(OrderDTO orderDTO) {
         Order order = new Order();
@@ -29,5 +33,19 @@ public class OrderConverter {
         orderDTO.setReceived(order.isReceived());
         orderDTO.setMessage(order.getMessage());
         return orderDTO;
+    }
+    public static List<Order> convertOrderDTOs(List<OrderDTO> OrderDTOS) {
+        List<Order> OrderList = new ArrayList<>();
+        for (OrderDTO OrderDTO : OrderDTOS) {
+            OrderList.add(convertOrderDTO(OrderDTO));
+        }
+        return OrderList;
+    }
+    public static List<OrderDTO> convertOrders(List<Order> OrderS) {
+        List<OrderDTO> OrderDTOList = new ArrayList<>();
+        for (Order Order : OrderS) {
+            OrderDTOList.add(convertOrder(Order));
+        }
+        return OrderDTOList;
     }
 }

@@ -4,10 +4,7 @@ import com.example.auctionplatform.converter.AddressConverter;
 import com.example.auctionplatform.dao.Address;
 import com.example.auctionplatform.dao.AddressRepository;
 import com.example.auctionplatform.dto.AddressDTO;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +21,7 @@ public class AddressServiceImpl {
     public AddressServiceImpl(AddressRepository addressRepository) {
         this.addressRepository = addressRepository;
     }
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
     public String deleteAddressById(int id){
         Optional<Address> optionalAddress = addressRepository.findById(id);
         if (optionalAddress.isPresent()) {
@@ -33,7 +30,9 @@ public class AddressServiceImpl {
         }
         return "Address not found!";
     }
-
+    public List<AddressDTO> getAllAddresses(){
+        return AddressConverter.convertAddresses(addressRepository.findAll());
+    }
 
     public String addNewAddress( AddressDTO newAddress){
         Address AddressDTO = AddressConverter.convertAddressDTO(newAddress);
@@ -43,9 +42,6 @@ public class AddressServiceImpl {
 
     public Address getAddress(int id) {
         Optional<Address> optionalAddress = addressRepository.findById(id);
-        if (optionalAddress.isPresent()) {
-            return optionalAddress.get();
-        }
-        return null;
+        return optionalAddress.orElse(null);
     }
 }
