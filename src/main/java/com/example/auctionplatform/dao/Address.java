@@ -16,7 +16,6 @@ public class Address {
     @Column(name ="address")
     private String address;
 
-
     public int getUserId() {
         return userId;
     }

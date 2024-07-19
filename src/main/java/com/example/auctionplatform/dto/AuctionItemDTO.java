@@ -6,11 +6,8 @@ import java.util.Date;
 
 public class AuctionItemDTO {
     private int id;
-
     private String description;
-
     private Object Image;
-
     private int userId;
     private double initialPrice;
 
