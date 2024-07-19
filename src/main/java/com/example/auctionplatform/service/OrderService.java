@@ -27,6 +27,9 @@ public interface OrderService {
      */
     List<OrderDTO> getAllOrders();
 
+    /**
+     * 修改对应id的订单的字段，如果对应字段为空或与原来相同，则不修改,并将信息写入日志中
+     */
     String updateOrderById(OrderDTO order);
 
     List<OrderDTO> getOrdersByUserId(int userId);
