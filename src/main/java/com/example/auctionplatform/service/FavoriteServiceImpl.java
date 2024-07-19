@@ -22,12 +22,16 @@ public class FavoriteServiceImpl {
         this.favoriteRepository=favoriteRepository;
     }
     private final FavoriteRepository favoriteRepository;
+
     public FavoriteRepository getFavoriteRepositoryById(int id) {
         Optional<Favorite> favorite=favoriteRepository.findById(id);
         if(favorite.isPresent()) {
             return favoriteRepository;
         }
         return null;
+    }
+    public List<Favorite> getAllFavorites() {
+        return favoriteRepository.findAll();
     }
     public String deleteFavoriteById(int id){
         Optional<Favorite> favorite=favoriteRepository.findById(id);
@@ -40,11 +44,11 @@ public class FavoriteServiceImpl {
     public String addFavorite(FavoriteDTO newfavoriteDTO){
         List<Favorite> favorite_uid=favoriteRepository.findByUserId(newfavoriteDTO.getUserId());
         if(!favorite_uid.isEmpty()) {
-            for(Favorite favorite:favorite_uid) {
-                if(favorite.getId()==newfavoriteDTO.getItemId()) {
-                    return "Favorite already exists";
-                }
+            for(var favorite:favorite_uid) {
+            if(favorite.getId()==newfavoriteDTO.getItemId()) {
+                return "Favorite already exists";
             }
+        }
         }
         Favorite favorite= FavoriteConverter.convertFavoriteDTO(newfavoriteDTO);
         favoriteRepository.save(favorite);
