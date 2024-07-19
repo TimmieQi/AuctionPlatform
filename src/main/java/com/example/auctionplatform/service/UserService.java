@@ -13,7 +13,7 @@ public interface UserService {
      * @return
      * 返回成功或者失败消息
      */
-    String addNewUser(UserDTO newUser);
+    Response<Void> addNewUser(UserDTO newUser);
 
     /**
      *删除对应id的用户
@@ -22,41 +22,41 @@ public interface UserService {
      * @return
      * 返回成功或者失败消息
      */
-    String deleteUserById(int id);
+    Response<Void> deleteUserById(int id);
 
     /**
      * 找到对应id
      * @return
      * 如果存在，返回对应用户
      */
-    UserDTO getUserById(int id);
+    Response<UserDTO> getUserById(int id);
 
     /**
      * 返回一个List，包含所有的User，数据量大请慎用
      */
-    List<UserDTO> getAllUser();
+    Response<List<UserDTO>> getAllUser();
 
     /**
      * 修改对应id的用户的字段，如果对应字段为空或与原来相同，则不修改,并将信息写入日志中
      */
-    String updateUser(int id,String nickname,String phone,String password,String email);
+    Response<Void> updateUser(int id,String nickname,String phone,String password,String email);
 
     /**
      * 提升某个用户的权限到管理员，并将信息写入日志中
      */
-    String grantAdminById(int id);
+    Response<Void> grantAdminById(int id);
     /**
      * 收回某个用户的权限的管理员，并将信息写入日志中
      */
-    String revokeAdminById(int id);
+    Response<Void> revokeAdminById(int id);
 
     /**
      * 给对应id账户提供数值为amount的金钱（单位：RMB）
      */
-    String raiseMoney(int id, double amount);
+    Response<Void> raiseMoney(int id, double amount);
 
     /**
      * 给对应id的账户扣除数值为amount的金钱（单位：RMB）
      */
-    String decreaseMoney(int id, double amount);
+    Response<Void> decreaseMoney(int id, double amount);
 }

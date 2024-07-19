@@ -15,10 +15,12 @@ public class AuctionItem {
     private String description;
     @Column(name ="user_id")
     private int userId;
+    @Column(name = "uploader_id")
+    private int uploaderId;
     @Column(name ="image")
     private Object Image;
     @Column(name ="initPrice")
-    private double initialPrice;
+    private  double initialPrice;
     @Column(name ="currPrice")
     private double currPrice;
     @Column(name ="state")
@@ -29,6 +31,14 @@ public class AuctionItem {
     private Date auctionTime;
     @Column(name ="favorite_sum")
     private int favoriteSum;
+
+    public int getUploaderId() {
+        return uploaderId;
+    }
+
+    public void setUploaderId(int uploaderId) {
+        this.uploaderId = uploaderId;
+    }
 
     public int getFavoriteSum() {
         return favoriteSum;
