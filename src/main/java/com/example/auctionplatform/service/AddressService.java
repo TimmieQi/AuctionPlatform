@@ -22,4 +22,10 @@ public interface AddressService  {
      */
     public String deleteAddressById(int id);
 
+    /**
+     * 导入类后判断id，然后判断是否需要更改，不能设置非空，导入之前的默认值，该多少是多少，只能改Address
+     * @param newAddress
+     * @return
+     */
+    public String updateAddressById(AddressDTO newAddress);
 }

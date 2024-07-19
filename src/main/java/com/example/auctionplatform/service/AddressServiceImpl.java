@@ -5,6 +5,7 @@ import com.example.auctionplatform.dao.Address;
 import com.example.auctionplatform.dao.AddressRepository;
 import com.example.auctionplatform.dto.AddressDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +31,19 @@ public class AddressServiceImpl {
         }
         return "Address not found!";
     }
+    public String updateAddressById(AddressDTO newAddress){
+        Optional<Address> optionalAddress = addressRepository.findById(newAddress.getAddressId());
+        String message = "";
+        if (optionalAddress.isPresent()) {
+            if(newAddress.getAddress() != null){
+                message+="Address set to"+newAddress.getAddress()+"\"\n";
+            }
+            addressRepository.save(optionalAddress.get());
+        }
+        return message;
+    }
     public List<AddressDTO> getAllAddresses(){
+
         return AddressConverter.convertAddresses(addressRepository.findAll());
     }
 
