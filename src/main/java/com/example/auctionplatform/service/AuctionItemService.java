@@ -9,9 +9,14 @@ public interface AuctionItemService {
     /**
      *方法和AddressService都一样
      */
-    public AuctionItem getAuctionItem(int id);
-    public List<AuctionItem> getAllAuctionItems();
-    public AuctionItem updateAuctionItem(AuctionItem auctionItem);
-    public String addAuctionItem(AuctionItemDTO newAuctionItemDTO);
-    public String deleteAuctionItemById(int id);
+    AuctionItem getAuctionItem(int id);
+
+    /**
+     * 返回一个可被遍历的List类型。
+     * @return
+     */
+    List<AuctionItem> getAllAuctionItems();
+    AuctionItem updateAuctionItem(AuctionItem auctionItem);
+    String addAuctionItem(AuctionItemDTO newAuctionItemDTO);
+    String deleteAuctionItemById(int id);
 }

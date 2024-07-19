@@ -1,7 +1,10 @@
 package com.example.auctionplatform.converter;
-
 import com.example.auctionplatform.dao.User;
 import com.example.auctionplatform.dto.UserDTO;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserConverter {
     public static User convertUserDTO(UserDTO userDTO) {
@@ -25,5 +28,19 @@ public class UserConverter {
         userDTO.setMoney(user.getMoney());
         userDTO.setAdmin(user.isAdmin());
         return userDTO;
+    }
+    public static List<User> convertUserDTOs(List<UserDTO> UserDTOS) {
+        List<User> UserList = new ArrayList<>();
+        for (UserDTO UserDTO : UserDTOS) {
+            UserList.add(convertUserDTO(UserDTO));
+        }
+        return UserList;
+    }
+    public static List<UserDTO> convertUsers(List<User> UserS) {
+        List<UserDTO> UserDTOList = new ArrayList<>();
+        for (User User : UserS) {
+            UserDTOList.add(convertUser(User));
+        }
+        return UserDTOList;
     }
 }
