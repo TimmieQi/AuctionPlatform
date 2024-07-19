@@ -14,7 +14,7 @@ public interface UserService {
      * @return
      * 返回成功或者失败消息
      */
-    public String addNewUser(UserDTO newUser);
+    String addNewUser(UserDTO newUser);
 
     /**
      *删除对应id的用户
@@ -23,17 +23,17 @@ public interface UserService {
      * @return
      * 返回成功或者失败消息
      */
-    public String deleteUserById(int id);
+    String deleteUserById(int id);
 
     /**
      * 找到对应id
      * @return
      * 如果存在，返回对应用户
      */
-    public User getUserById(int id);
+    User getUserById(int id);
 
     /**
      * 返回一个List，包含所有的User，数据量大请慎用
      */
-    public List<User> getAllUser();
+    List<User> getAllUser();
 }

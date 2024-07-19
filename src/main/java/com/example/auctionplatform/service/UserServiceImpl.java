@@ -13,7 +13,10 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    UserRepository userRepository;
+    public UserServiceImpl(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+    private final UserRepository userRepository;
     @Override
     public String addNewUser(UserDTO newUser) {
         User tempUser = userRepository.findByEmail(newUser.getEmail());
