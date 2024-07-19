@@ -19,9 +19,13 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     @Override
     public String addNewOrder(OrderDTO order) {
-        Optional<Order> tempOrder = orderRepository.findById(order.getId());
-        if (tempOrder.isPresent()) {
-            return "Order Already Exists";
+        List<Order> tempOrder = orderRepository.findByOrderByBuyId(order.getId());
+        if (!tempOrder.isEmpty()) {
+            for (Order o : tempOrder) {
+                if(o.getItemId() == order.getItemId()) {
+                    return "Order already exists";
+                }
+            }
         }
         Order newOrder = OrderConverter.convertOrderDTO(order);
         orderRepository.save(newOrder);
