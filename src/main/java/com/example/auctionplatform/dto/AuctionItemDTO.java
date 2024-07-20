@@ -8,6 +8,7 @@ public class AuctionItemDTO {
     private String description;
     private Object Image;
     private int userId;
+    private int uploaderId;
     private double initialPrice;
 
     private double currPrice;
@@ -18,6 +19,14 @@ public class AuctionItemDTO {
 
     private Date auctionTime;
     private int favoriteSum;
+
+    public int getUploaderId() {
+        return uploaderId;
+    }
+
+    public void setUploaderId(int uploaderId) {
+        this.uploaderId = uploaderId;
+    }
 
     public int getFavoriteSum() {
         return favoriteSum;
