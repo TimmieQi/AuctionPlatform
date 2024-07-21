@@ -68,6 +68,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
             return Response.newError("An error occurred while updating auction item.\n");
         }
     }
+
     @Override
     public Response<AuctionItemDTO> getAuctionItem(int id){
         try {

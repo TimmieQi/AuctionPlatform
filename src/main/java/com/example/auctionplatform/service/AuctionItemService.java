@@ -14,6 +14,7 @@ public interface AuctionItemService {
 
     /**
      * 返回所有订单信息
+     * @return
      */
     Response<List<AuctionItemDTO>> getAllAuctionItems();
 
