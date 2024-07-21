@@ -19,8 +19,8 @@ public class deleteFavoriteByIdController {
         this.favoriteService=favoriteService;
     }
     private final FavoriteService favoriteService;
-    @DeleteMapping("delete")
-    public Response<Void> delete(@PathVariable int id) {
+    @DeleteMapping("/delete/id/{id}")
+    public Response<Void> delete(@PathVariable("id") int id) {
         return favoriteService.deleteFavoriteById(id);
     }
 }
