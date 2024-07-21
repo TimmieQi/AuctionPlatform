@@ -1,5 +1,6 @@
 package com.example.auctionplatform.service;
 
+import com.example.auctionplatform.controller.SignInUserController;
 import com.example.auctionplatform.converter.UserConverter;
 import com.example.auctionplatform.dao.User;
 import com.example.auctionplatform.dao.UserRepository;
@@ -13,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     public UserServiceImpl(UserRepository userRepository){
         this.userRepository = userRepository;
@@ -33,6 +36,7 @@ public class UserServiceImpl implements UserService {
                 return Response.newError("User that uses phone number \"" + newUser.getPhone() + "\" already exists\n");
             }
             tempUser = UserConverter.convertUserDTO(newUser);
+            tempUser.setMoney(0f);//初始0金钱
             userRepository.save(tempUser);//确认是新的用户，存入
             String message = "Successfully added new user";
             LogManager.LogUser(LogLevel.INFO, message);
@@ -101,7 +105,7 @@ public class UserServiceImpl implements UserService {
             }
             String message = "";
             if (!(nickname.isEmpty())) {
-                if (!tempUser.get().getNickname().equals(nickname)) {
+                if (!nickname.equals(tempUser.get().getNickname())) {
                     tempUser.get().setNickname(nickname);
                     message += "Nickname set to \"" + nickname + "\"\n";
                 } else {
@@ -110,14 +114,20 @@ public class UserServiceImpl implements UserService {
             }
             if (!phone.isEmpty()) {
                 if (!tempUser.get().getPhone().equals(phone)) {
-                    tempUser.get().setPhone(phone);
-                    message += "Phone set to \"" + phone + "\"\n";
+                    User otherUser = userRepository.findByPhone(phone);
+                    if (otherUser != null) {
+                        message += "Phone number already in use\n";
+                    }
+                    else {
+                        tempUser.get().setPhone(phone);
+                        message += "Phone set to \"" + phone + "\"\n";
+                    }
                 } else {
                     message += "Phone cannot be the same\n";
                 }
             }
             if (!password.isEmpty()) {
-                if (!tempUser.get().getPassword().equals(password)) {
+                if (!password.equals(tempUser.get().getPassword())) {
                     tempUser.get().setPassword(password);
                     message += "Password set to \"" + password + "\"\n";
                 } else {
@@ -125,9 +135,14 @@ public class UserServiceImpl implements UserService {
                 }
             }
             if (!email.isEmpty()) {
-                if (!tempUser.get().getEmail().equals(email)) {
-                    tempUser.get().setEmail(email);
-                    message += "Email set to \"" + email + "\"\n";
+                if (!email.equals(tempUser.get().getEmail())) {
+                    User otherUser = userRepository.findByEmail(email);
+                    if (otherUser != null) {
+                        message += "Email already in use\n";
+                    }else {
+                        tempUser.get().setEmail(email);
+                        message += "Email set to \"" + email + "\"\n";
+                    }
                 } else {
                     message += "Email cannot be the same\n";
                 }
@@ -227,6 +242,32 @@ public class UserServiceImpl implements UserService {
             e.fillInStackTrace();
             LogManager.LogUser(LogLevel.ERROR,e.getMessage()+"An error occurred while decreasing user\n");
             return Response.newError("An error occurred while decreasing user\n");
+        }
+    }
+
+    @Override
+    public Response<UserDTO> getUserByPhoneAndPassword(String phone, String password) {
+        try{
+            User optionalUser = userRepository.findByPhone(phone);
+            if (optionalUser == null) {
+                return Response.newErrorWithEmptyReturn("User with phone \"" + phone + "\" not found\n");
+            }
+            if (optionalUser.getPassword().equals(password)) { //不需要返回密码给前端
+                UserDTO userDTO = new UserDTO();
+                userDTO.setPhone(phone);
+                userDTO.setId(optionalUser.getId());
+                userDTO.setMoney(optionalUser.getMoney());
+                userDTO.setAdmin(optionalUser.isAdmin());
+                userDTO.setNickname(optionalUser.getNickname());
+                userDTO.setEmail(optionalUser.getEmail());
+                return Response.newSuccess(userDTO, "Successfully login \"" + optionalUser.getId() + "\"\n");
+            }
+            return Response.newErrorWithEmptyReturn("Wrong password\n");
+        }
+        catch (Exception e){
+            e.fillInStackTrace();
+            LogManager.LogUser(LogLevel.ERROR,e.getMessage()+"An error occurred while getting user\n");
+            return Response.newErrorWithEmptyReturn("An error occurred while getting user\n");
         }
     }
 }

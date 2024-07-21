@@ -15,7 +15,7 @@ public class UserConverter {
         user.setPassword(userDTO.getPassword());
         user.setEmail(userDTO.getEmail());
         user.setMoney(userDTO.getMoney());
-        user.setAdmin(userDTO.isAdmin());
+        user.setAdmin(userDTO.getAdmin());
         return user;
     }
     public static UserDTO convertUser(User user) {

@@ -3,7 +3,6 @@ package com.example.auctionplatform.service;
 import com.example.auctionplatform.converter.AuctionItemConverter;
 import com.example.auctionplatform.dao.AuctionItem;
 import com.example.auctionplatform.dao.AuctionItemRepository;
-import com.example.auctionplatform.dto.AddressDTO;
 import com.example.auctionplatform.dto.AuctionItemDTO;
 
 import com.example.auctionplatform.logger.LogManager;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 /*
@@ -49,15 +49,19 @@ public class AuctionItemServiceImpl implements AuctionItemService {
             }
             if (newAuctionItemDTO.getAuctionTime() != null) {
                 auctionItem.get().setAuctionTime(newAuctionItemDTO.getAuctionTime());
-                message += "Image set to" + newAuctionItemDTO.getAuctionTime() + "\n";
+                message += "AuctionTime set to" + newAuctionItemDTO.getAuctionTime() + "\n";
             }
-            if (newAuctionItemDTO.getState() != AddressDTO.AUCTION_ITEM_STATE_NOT_CHANGE) {
+            if (newAuctionItemDTO.getState() != null) {
                 auctionItem.get().setState(newAuctionItemDTO.getState());
-                message += "Image set to" + newAuctionItemDTO.getState() + "\n";
+                message += "State set to" + newAuctionItemDTO.getState() + "\n";
             }
             if (newAuctionItemDTO.getInitialPrice() > 0.01f) {//最低不能低于1分钱
                 auctionItem.get().setInitialPrice(newAuctionItemDTO.getInitialPrice());
                 message += "Price set to" + newAuctionItemDTO.getInitialPrice() + "\n";
+            }
+            if(newAuctionItemDTO.getUserId() != null){
+                auctionItem.get().setUserId(newAuctionItemDTO.getUserId());
+                message += "User id set to" + newAuctionItemDTO.getUserId() + "\n";
             }
             auctionItemRepository.save(auctionItem.get());
             return Response.newSuccess(null,message);
@@ -96,6 +100,51 @@ public class AuctionItemServiceImpl implements AuctionItemService {
             return Response.newErrorWithEmptyReturn("An error occurred while getting auction items.\n");
         }
     }
+
+    @Override
+    public Response<List<AuctionItemDTO>> getAuctionItemsByUploaderId(int UploadId) {
+        try{
+            List<AuctionItem> auctionItems = auctionItemRepository.findByUploaderId(UploadId);
+            if(auctionItems.isEmpty()){
+                return Response.newErrorWithEmptyReturn("No Auction items found.\n");
+            }
+            return Response.newSuccess(AuctionItemConverter.convertAuctionItems(auctionItems),"Auction items found.\n");
+        }catch (Exception e){
+            e.fillInStackTrace();
+            LogManager.LogOtherError(e.getMessage()+"An error occurred while getting auction items.\n");
+            return Response.newErrorWithEmptyReturn("An error occurred while getting auction items.\n");
+        }
+    }
+
+    @Override
+    public Response<List<AuctionItemDTO>> getAuctionItemsByName(String name) {
+        try{
+            List<AuctionItem> auctionItems = auctionItemRepository.findByName(name);
+            if(auctionItems.isEmpty()){
+                return Response.newErrorWithEmptyReturn("No Auction items found.\n");
+            }
+            List<AuctionItemDTO> auctionItemDTOs = new ArrayList<>();
+            for (AuctionItem auctionItem : auctionItems) {
+                AuctionItemDTO newAuctionItemDTO = new AuctionItemDTO();
+                newAuctionItemDTO.setId(auctionItem.getId());
+                newAuctionItemDTO.setImage(auctionItem.getImage());
+                newAuctionItemDTO.setName(auctionItem.getName());
+                auctionItemDTOs.add(newAuctionItemDTO);
+            }
+            return Response.newSuccess(auctionItemDTOs,"Auction items found.\n");
+        }
+        catch (Exception e){
+            e.fillInStackTrace();
+            LogManager.LogOtherError(e.getMessage()+"An error occurred while getting auction items.\n");
+            return Response.newErrorWithEmptyReturn("An error occurred while getting auction items.\n");
+        }
+    }
+
+    @Override
+    public Response<Void> OfferingPrice(AuctionItemDTO auctionItemDTO) {
+        return Response.newError("Not implemented yet.");
+    }
+
     @Override
     public Response<List<AuctionItemDTO>> getAllAuctionItems(){
         try{

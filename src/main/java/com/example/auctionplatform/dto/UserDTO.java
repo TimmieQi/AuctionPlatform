@@ -3,7 +3,7 @@ package com.example.auctionplatform.dto;
 import jakarta.persistence.Column;
 
 public class UserDTO {
-    private int id;
+    private Integer id;
 
     private String nickname;
 
@@ -13,15 +13,15 @@ public class UserDTO {
 
     private String phone;
 
-    private double money;
+    private Double money;
 
-    private boolean isAdmin;
+    private Boolean isAdmin;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -57,19 +57,19 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public double getMoney() {
+    public Double getMoney() {
         return money;
     }
 
-    public void setMoney(double money) {
+    public void setMoney(Double money) {
         this.money = money;
     }
 
-    public boolean isAdmin() {
+    public Boolean getAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
+    public void setAdmin(Boolean admin) {
         isAdmin = admin;
     }
 }
