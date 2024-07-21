@@ -7,12 +7,12 @@ import com.example.auctionplatform.dto.AuctionItemDTO;
 
 import com.example.auctionplatform.logger.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 /*
  已重构
  YCX
@@ -25,12 +25,15 @@ import java.util.Optional;
  */
 @Service
 public class AuctionItemServiceImpl implements AuctionItemService {
+    private final Map<Integer, List<AuctionItemDTO>> auctionItemQueueMap = new ConcurrentHashMap<>();
 
     @Autowired
     public AuctionItemServiceImpl(AuctionItemRepository auctionItemRepository) {
         this.auctionItemRepository = auctionItemRepository;
     }
+
     private final AuctionItemRepository auctionItemRepository;
+
     @Override
     public Response<Void> updateAuctionItem(AuctionItemDTO newAuctionItemDTO) {
         try {
@@ -59,68 +62,64 @@ public class AuctionItemServiceImpl implements AuctionItemService {
                 auctionItem.get().setInitialPrice(newAuctionItemDTO.getInitialPrice());
                 message += "Price set to" + newAuctionItemDTO.getInitialPrice() + "\n";
             }
-            if(newAuctionItemDTO.getUserId() != null){
-                auctionItem.get().setUserId(newAuctionItemDTO.getUserId());
-                message += "User id set to" + newAuctionItemDTO.getUserId() + "\n";
-            }
             auctionItemRepository.save(auctionItem.get());
-            return Response.newSuccess(null,message);
-        }
-        catch (Exception e){
+            return Response.newSuccess(null, message);
+        } catch (Exception e) {
             e.fillInStackTrace();
             LogManager.LogOtherError(e.getMessage() + "An error occurred while updating auction item.\n");
             return Response.newError("An error occurred while updating auction item.\n");
         }
     }
+
     @Override
-    public Response<AuctionItemDTO> getAuctionItem(int id){
+    public Response<AuctionItemDTO> getAuctionItem(int id) {
         try {
             Optional<AuctionItem> optionalAuctionItem = auctionItemRepository.findById(id);
             return optionalAuctionItem.map(auctionItem ->
-                    Response.newSuccess(AuctionItemConverter.convertAuctionItem(auctionItem), "Auction item found.\n"))
+                            Response.newSuccess(AuctionItemConverter.convertAuctionItem(auctionItem), "Auction item found.\n"))
                     .orElseGet(() -> Response.newErrorWithEmptyReturn("Auction item does not exist.\n"));
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.fillInStackTrace();
             LogManager.LogOtherError(e.getMessage() + "An error occurred while getting auction item.\n");
             return Response.newErrorWithEmptyReturn("An error occurred while getting auction item.\n");
         }
     }
+
     @Override
     public Response<List<AuctionItemDTO>> getAuctionItemsByUserId(int userId) {
-        try{
+        try {
             List<AuctionItem> auctionItems = auctionItemRepository.findByUserId(userId);
-            if(auctionItems.isEmpty()){
+            if (auctionItems.isEmpty()) {
                 return Response.newErrorWithEmptyReturn("No Auction items found.\n");
             }
-            return Response.newSuccess(AuctionItemConverter.convertAuctionItems(auctionItems),"Auction items found.\n");
-        }catch (Exception e){
+            return Response.newSuccess(AuctionItemConverter.convertAuctionItems(auctionItems), "Auction items found.\n");
+        } catch (Exception e) {
             e.fillInStackTrace();
-            LogManager.LogOtherError(e.getMessage()+"An error occurred while getting auction items.\n");
+            LogManager.LogOtherError(e.getMessage() + "An error occurred while getting auction items.\n");
             return Response.newErrorWithEmptyReturn("An error occurred while getting auction items.\n");
         }
     }
 
     @Override
     public Response<List<AuctionItemDTO>> getAuctionItemsByUploaderId(int UploadId) {
-        try{
+        try {
             List<AuctionItem> auctionItems = auctionItemRepository.findByUploaderId(UploadId);
-            if(auctionItems.isEmpty()){
+            if (auctionItems.isEmpty()) {
                 return Response.newErrorWithEmptyReturn("No Auction items found.\n");
             }
-            return Response.newSuccess(AuctionItemConverter.convertAuctionItems(auctionItems),"Auction items found.\n");
-        }catch (Exception e){
+            return Response.newSuccess(AuctionItemConverter.convertAuctionItems(auctionItems), "Auction items found.\n");
+        } catch (Exception e) {
             e.fillInStackTrace();
-            LogManager.LogOtherError(e.getMessage()+"An error occurred while getting auction items.\n");
+            LogManager.LogOtherError(e.getMessage() + "An error occurred while getting auction items.\n");
             return Response.newErrorWithEmptyReturn("An error occurred while getting auction items.\n");
         }
     }
 
     @Override
     public Response<List<AuctionItemDTO>> getAuctionItemsByName(String name) {
-        try{
+        try {
             List<AuctionItem> auctionItems = auctionItemRepository.findByName(name);
-            if(auctionItems.isEmpty()){
+            if (auctionItems.isEmpty()) {
                 return Response.newErrorWithEmptyReturn("No Auction items found.\n");
             }
             List<AuctionItemDTO> auctionItemDTOs = new ArrayList<>();
@@ -131,58 +130,98 @@ public class AuctionItemServiceImpl implements AuctionItemService {
                 newAuctionItemDTO.setName(auctionItem.getName());
                 auctionItemDTOs.add(newAuctionItemDTO);
             }
-            return Response.newSuccess(auctionItemDTOs,"Auction items found.\n");
-        }
-        catch (Exception e){
+            return Response.newSuccess(auctionItemDTOs, "Auction items found.\n");
+        } catch (Exception e) {
             e.fillInStackTrace();
-            LogManager.LogOtherError(e.getMessage()+"An error occurred while getting auction items.\n");
+            LogManager.LogOtherError(e.getMessage() + "An error occurred while getting auction items.\n");
             return Response.newErrorWithEmptyReturn("An error occurred while getting auction items.\n");
         }
+    }
+
+    public void addOfferingPrice(AuctionItemDTO auctionItemDTO) {
+        auctionItemQueueMap.computeIfAbsent(auctionItemDTO.getId(), k -> new ArrayList<>()).add(auctionItemDTO);
     }
 
     @Override
     public Response<Void> OfferingPrice(AuctionItemDTO auctionItemDTO) {
-        return Response.newError("Not implemented yet.");
+        try {
+            Optional<AuctionItem> auctionItem = auctionItemRepository.findById(auctionItemDTO.getId());
+            if (auctionItem.isEmpty()) {
+                return Response.newError("No auction item found\n");
+            }
+            this.addOfferingPrice(auctionItemDTO);//把请求添加到哈希表里
+            return Response.newSuccess(null, "new offering added.\n");
+        } catch (Exception e) {
+            e.fillInStackTrace();
+            LogManager.LogOtherError(e.getMessage() + "An error occurred while Offering price.\n");
+            return Response.newError("An error occurred while Offering price.\n");
+        }
+    }
+
+    @Scheduled(fixedRate = 5000) // 每隔5秒处理一次
+    public void processAuctionItemQueue() {
+        auctionItemQueueMap.forEach((itemId, auctionItemQueue) -> {
+            if (!auctionItemQueue.isEmpty()) {
+                Optional<AuctionItem> optionalAuctionItem = auctionItemRepository.findById(itemId);
+                if (optionalAuctionItem.isPresent()) {
+                    AuctionItem auctionItem = optionalAuctionItem.get();
+                    // 找到最高竞价
+                    AuctionItemDTO highestBid = auctionItemQueue.stream()
+                            .max(Comparator.comparingDouble(AuctionItemDTO::getCurrPrice))
+                            .orElse(null);
+
+                    if (highestBid != null && highestBid.getCurrPrice() > auctionItem.getCurrPrice()) {
+                        auctionItem.setCurrPrice(highestBid.getCurrPrice());
+                        auctionItem.setUserId(highestBid.getUserId());
+                        auctionItemRepository.save(auctionItem);
+                    }
+                }
+                // 清空队列
+                auctionItemQueue.clear();
+            }
+        });
     }
 
     @Override
-    public Response<List<AuctionItemDTO>> getAllAuctionItems(){
-        try{
+    public Response<List<AuctionItemDTO>> getAllAuctionItems() {
+        try {
             List<AuctionItem> auctionItems = auctionItemRepository.findAll();
-            if(auctionItems.isEmpty()){
+            if (auctionItems.isEmpty()) {
                 return Response.newErrorWithEmptyReturn("No Auction items found.\n");
             }
-            return Response.newSuccess(AuctionItemConverter.convertAuctionItems(auctionItems),"Auction items found.\n");
-        }catch (Exception e){
+            return Response.newSuccess(AuctionItemConverter.convertAuctionItems(auctionItems), "Auction items found.\n");
+        } catch (Exception e) {
             e.fillInStackTrace();
-            LogManager.LogOtherError(e.getMessage()+"An error occurred while getting auction items.\n");
+            LogManager.LogOtherError(e.getMessage() + "An error occurred while getting auction items.\n");
             return Response.newErrorWithEmptyReturn("An error occurred while getting auction items.\n");
         }
     }
+
     @Override
-    public Response<Void> addAuctionItem(AuctionItemDTO newAuctionItemDTO){
-        try{
+    public Response<Void> addAuctionItem(AuctionItemDTO newAuctionItemDTO) {
+        try {
             AuctionItem AuctionItem = AuctionItemConverter.convertAuctionItemDTO(newAuctionItemDTO);
             auctionItemRepository.save(AuctionItem);
-            return Response.newSuccess(null,"Auction item added.\n");
-        }catch (Exception e){
+            return Response.newSuccess(null, "Auction item added.\n");
+        } catch (Exception e) {
             e.fillInStackTrace();
-            LogManager.LogOtherError(e.getMessage()+"An error occurred while adding item.\n");
+            LogManager.LogOtherError(e.getMessage() + "An error occurred while adding item.\n");
             return Response.newErrorWithEmptyReturn("An error occurred while adding item.\n");
         }
     }
+
     @Override
-    public Response<Void> deleteAuctionItemById(int id){
-        try{
-            Optional<AuctionItem> optionalAuctionItem=auctionItemRepository.findById(id);
-            if(optionalAuctionItem.isPresent()) {
+    public Response<Void> deleteAuctionItemById(int id) {
+        try {
+            Optional<AuctionItem> optionalAuctionItem = auctionItemRepository.findById(id);
+            if (optionalAuctionItem.isPresent()) {
                 auctionItemRepository.delete(optionalAuctionItem.get());
-                return Response.newSuccess(null,"Auction item deleted.\n");
+                return Response.newSuccess(null, "Auction item deleted.\n");
             }
             return Response.newError("Auction item does not exist.\n");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.fillInStackTrace();
-            LogManager.LogOtherError(e.getMessage()+"An error occurred while deleting item.\n");
+            LogManager.LogOtherError(e.getMessage() + "An error occurred while deleting item.\n");
             return Response.newError("An error occurred while deleting item.\n");
         }
     }

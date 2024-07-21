@@ -19,7 +19,7 @@ public class SignInUserController {
     public Response<Void> signInUser(@RequestBody UserDTO userDTO){
         //格式检查
         String email = userDTO.getEmail();
-        if(FormatCheck.isValidEmail(email)){
+        if(!FormatCheck.isValidEmail(email)){
             return Response.newError("Wrong email format\n");
         }
         String telNum = userDTO.getPhone();
@@ -39,10 +39,10 @@ public class SignInUserController {
         }
         //end格式检查
         UserDTO SignInUserDTO = new UserDTO();
-        userDTO.setNickname(nickname);
-        userDTO.setPhone(telNum);
-        userDTO.setPassword(password);
-        userDTO.setEmail(email);
+        SignInUserDTO.setNickname(nickname);
+        SignInUserDTO.setPhone(telNum);
+        SignInUserDTO.setPassword(password);
+        SignInUserDTO.setEmail(email);
         return userService.addNewUser(SignInUserDTO);
     }
 }

@@ -35,7 +35,12 @@ public class UserServiceImpl implements UserService {
             if (tempUser != null) {
                 return Response.newError("User that uses phone number \"" + newUser.getPhone() + "\" already exists\n");
             }
-            tempUser = UserConverter.convertUserDTO(newUser);
+            tempUser = new User();
+            tempUser.setEmail(newUser.getEmail());
+            tempUser.setPhone(newUser.getPhone());
+            tempUser.setPassword(newUser.getPassword());
+            tempUser.setNickname(newUser.getNickname());
+            tempUser.setAdmin(false);
             tempUser.setMoney(0f);//初始0金钱
             userRepository.save(tempUser);//确认是新的用户，存入
             String message = "Successfully added new user";

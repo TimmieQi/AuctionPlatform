@@ -19,7 +19,7 @@ public class User {
     private String phone;
     @Column(name ="money")
     private double money;
-    @Column(name = "IsAdmin")
+    @Column(name = "isAdmin")
     private boolean isAdmin;
 
     public int getId() {
