@@ -18,7 +18,7 @@ public deleteAddressController(AddressService addressService) {
     this.addressService = addressService;
 }
     private final AddressService addressService;
-@DeleteMapping("/delete")
+@DeleteMapping("/delete/id/{id}")
     public Response<Void> delete(@PathVariable("id") int id) {
     return addressService.deleteAddressById(id);
 }
