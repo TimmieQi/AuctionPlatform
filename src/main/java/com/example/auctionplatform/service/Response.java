@@ -3,6 +3,7 @@ package com.example.auctionplatform.service;
 public class Response <T>{
     private T data;
     private boolean isSuccess;
+    private int errorCode;
     public String message;
 
     public static <K> Response<K> newSuccess(K data,String message){
@@ -28,6 +29,15 @@ public class Response <T>{
         response.setData(null);
         return response;
     }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
+    }
+
     public T getData() {
         return data;
     }

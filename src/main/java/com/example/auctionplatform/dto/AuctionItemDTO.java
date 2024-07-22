@@ -4,51 +4,28 @@ package com.example.auctionplatform.dto;
 import java.util.Date;
 
 public class AuctionItemDTO {
-    private int id;
+    private Integer id;
     private String description;
     private Object Image;
-    private int userId;
-    private int uploaderId;
-    private double initialPrice;
+    private Integer userId;
+    private Integer uploaderId;
+    private Double initialPrice;
 
-    private double currPrice;
+    private Double currPrice;
 
-    private short state;
+    private Short state;
 
     private Date uploadTime;
 
     private Date auctionTime;
-    private int favoriteSum;
+    private Integer favoriteSum;
+    private String name;
 
-    public int getUploaderId() {
-        return uploaderId;
-    }
-
-    public void setUploaderId(int uploaderId) {
-        this.uploaderId = uploaderId;
-    }
-
-    public int getFavoriteSum() {
-        return favoriteSum;
-    }
-
-    public void setFavoriteSum(int favoriteSum) {
-        this.favoriteSum = favoriteSum;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -68,27 +45,43 @@ public class AuctionItemDTO {
         Image = image;
     }
 
-    public double getInitialPrice() {
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getUploaderId() {
+        return uploaderId;
+    }
+
+    public void setUploaderId(Integer uploaderId) {
+        this.uploaderId = uploaderId;
+    }
+
+    public Double getInitialPrice() {
         return initialPrice;
     }
 
-    public void setInitialPrice(double initialPrice) {
+    public void setInitialPrice(Double initialPrice) {
         this.initialPrice = initialPrice;
     }
 
-    public double getCurrPrice() {
+    public Double getCurrPrice() {
         return currPrice;
     }
 
-    public void setCurrPrice(double currPrice) {
+    public void setCurrPrice(Double currPrice) {
         this.currPrice = currPrice;
     }
 
-    public short getState() {
+    public Short getState() {
         return state;
     }
 
-    public void setState(short state) {
+    public void setState(Short state) {
         this.state = state;
     }
 
@@ -106,5 +99,21 @@ public class AuctionItemDTO {
 
     public void setAuctionTime(Date auctionTime) {
         this.auctionTime = auctionTime;
+    }
+
+    public Integer getFavoriteSum() {
+        return favoriteSum;
+    }
+
+    public void setFavoriteSum(Integer favoriteSum) {
+        this.favoriteSum = favoriteSum;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

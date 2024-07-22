@@ -17,7 +17,7 @@ public class OrderConverter {
         order.setPrice(orderDTO.getPrice());
         order.setSaleAdd(orderDTO.getSaleAdd());
         order.setBuyAdd(orderDTO.getBuyAdd());
-        order.setReceived(orderDTO.isReceived());
+        order.setReceived(orderDTO.getReceived());
         order.setMessage(orderDTO.getMessage());
         return order;
     }

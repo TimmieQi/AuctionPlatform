@@ -3,61 +3,61 @@ package com.example.auctionplatform.dto;
 import jakarta.persistence.Column;
 
 public class OrderDTO {
-    private int id;
+    private Integer id;
 
-    private int saleId;
+    private Integer saleId;
 
-    private int buyId;
+    private Integer buyId;
 
-    private int itemId;
+    private Integer itemId;
 
-    private double price;
+    private Double price;
 
     private String saleAdd;
 
     private String buyAdd;
 
-    private boolean isReceived;
+    private Boolean isReceived;
 
     private String message;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getSaleId() {
+    public Integer getSaleId() {
         return saleId;
     }
 
-    public void setSaleId(int saleId) {
+    public void setSaleId(Integer saleId) {
         this.saleId = saleId;
     }
 
-    public int getBuyId() {
+    public Integer getBuyId() {
         return buyId;
     }
 
-    public void setBuyId(int buyId) {
+    public void setBuyId(Integer buyId) {
         this.buyId = buyId;
     }
 
-    public int getItemId() {
+    public Integer getItemId() {
         return itemId;
     }
 
-    public void setItemId(int itemId) {
+    public void setItemId(Integer itemId) {
         this.itemId = itemId;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -77,11 +77,11 @@ public class OrderDTO {
         this.buyAdd = buyAdd;
     }
 
-    public boolean isReceived() {
+    public Boolean getReceived() {
         return isReceived;
     }
 
-    public void setReceived(boolean received) {
+    public void setReceived(Boolean received) {
         isReceived = received;
     }
 

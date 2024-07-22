@@ -3,31 +3,31 @@ package com.example.auctionplatform.dto;
 import jakarta.persistence.Column;
 
 public class FavoriteDTO {
-    private int id;
-    private int userId;
-    private int itemId;
+    private Integer id;
+    private Integer userId;
+    private Integer itemId;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public int getItemId() {
+    public Integer getItemId() {
         return itemId;
     }
 
-    public void setItemId(int itemId) {
+    public void setItemId(Integer itemId) {
         this.itemId = itemId;
     }
 }

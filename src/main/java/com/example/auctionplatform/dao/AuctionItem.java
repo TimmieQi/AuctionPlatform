@@ -31,6 +31,16 @@ public class AuctionItem {
     private Date auctionTime;
     @Column(name ="favorite_sum")
     private int favoriteSum;
+    @Column(name ="name")
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public int getUploaderId() {
         return uploaderId;
