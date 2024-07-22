@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
  * 日期：2024/7/21 下午3:17
  */
 @RestController
-@RequestMapping("api/address")
+@RequestMapping("/api")
 public class AddAddressController {
     @Autowired
     public AddAddressController(AddressService addressService) {
         this.addressService = addressService;
     }
     private final AddressService addressService;
-    @DeleteMapping("/delete")
-    public Response<Void> delete(@RequestBody AddressDTO addressDTO){
+    @PostMapping("/address/add")
+    public Response<Void> addAddress(@RequestBody AddressDTO addressDTO){
         return addressService.addNewAddress(addressDTO);
     }
 }
