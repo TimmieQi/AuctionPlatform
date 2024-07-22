@@ -2,7 +2,10 @@ package com.example.auctionplatform.controller.FavoriteController;
 
 import com.example.auctionplatform.dto.FavoriteDTO;
 import com.example.auctionplatform.service.FavoriteService;
+import com.example.auctionplatform.service.JWTService;
 import com.example.auctionplatform.service.Response;
+import com.example.auctionplatform.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,13 +17,24 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/Favorite")
 public class GetFavByIdController {
+    private final FavoriteService favoriteService;
+    private final UserService userService;
     @Autowired
-    public GetFavByIdController(FavoriteService favoriteService) {
-        this.favoriteService=favoriteService;
+    public GetFavByIdController(FavoriteService favoriteService, UserService userService) {
+        this.favoriteService = favoriteService;
+        this.userService = userService;
     }
-    private final FavoriteService  favoriteService;
+
     @GetMapping("/fromId/id/{id}")
-    public Response<FavoriteDTO> getFavById(@PathVariable("id") int id) {
-    return favoriteService.getFavoriteById(id);
+    public Response<FavoriteDTO> getFavById(@PathVariable("id") int id, @RequestHeader(name ="Authorization") String token,
+                                            HttpServletResponse httpServletResponse) {
+        try{
+            JWTService.parseToken(token,userService.getSecret());
+            return favoriteService.getFavoriteById(id);
+        }catch (Exception e) {
+            httpServletResponse.setStatus(401);
+            return Response.newErrorWithEmptyReturn("获取收藏夹失败");
+        }
+
 }
 }

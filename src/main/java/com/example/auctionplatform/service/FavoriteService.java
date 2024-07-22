@@ -6,6 +6,7 @@ import com.example.auctionplatform.dto.FavoriteDTO;
 import java.util.List;
 
 public interface FavoriteService {
+
     /**
      * 这个地方判断ADD的对象是否存在
      */
