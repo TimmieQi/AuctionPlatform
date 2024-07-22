@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/favorite")
-public class addFavoriteController {
+public class AddFavoriteController {
 
     private final FavoriteService favoriteService;
 
     @Autowired
-    public addFavoriteController(FavoriteService favoriteService) {
+    public AddFavoriteController(FavoriteService favoriteService) {
         this.favoriteService = favoriteService;
     }
 

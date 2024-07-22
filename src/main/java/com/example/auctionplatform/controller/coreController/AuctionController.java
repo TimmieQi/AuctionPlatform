@@ -1,4 +1,4 @@
-package com.example.auctionplatform.controller;
+package com.example.auctionplatform.controller.coreController;
 
 
 import com.example.auctionplatform.dto.AuctionItemDTO;

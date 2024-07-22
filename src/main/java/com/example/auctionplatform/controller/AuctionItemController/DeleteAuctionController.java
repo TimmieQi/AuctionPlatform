@@ -1,4 +1,4 @@
-package com.example.auctionplatform.controller.AuctionController;
+package com.example.auctionplatform.controller.AuctionItemController;
 
 import com.example.auctionplatform.service.AuctionItemService;
 import com.example.auctionplatform.service.Response;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/auction")
-public class deleteAuctionController {
+public class DeleteAuctionController {
     private final AuctionItemService auctionItemService;
     @Autowired
-    public deleteAuctionController(AuctionItemService auctionItemService) {
+    public DeleteAuctionController(AuctionItemService auctionItemService) {
         this.auctionItemService = auctionItemService;
     }
     @DeleteMapping("/delete/auctionId/{auctionId}")
