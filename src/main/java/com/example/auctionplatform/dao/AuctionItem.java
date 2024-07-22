@@ -7,6 +7,7 @@ import java.util.Date;
 @Entity
 @Table(name = "AuctionItem")
 public class AuctionItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="id")

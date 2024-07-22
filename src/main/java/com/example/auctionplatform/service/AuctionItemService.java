@@ -10,11 +10,13 @@ public interface AuctionItemService {
     /**
      *方法和AddressService都一样
      */
+    short AUCTION_NOT_STARTED= 0;
+    short AUCTION_START= 1;
+    short AUCTION_SOLD= -1;
     Response<AuctionItemDTO> getAuctionItem(int id);
 
     /**
      * 返回所有订单信息
-     * @return
      */
     Response<List<AuctionItemDTO>> getAllAuctionItems();
 
