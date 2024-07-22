@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 /*
  已重构
  YCX
@@ -101,4 +102,23 @@ public class FavoriteServiceImpl implements FavoriteService {
             return Response.newErrorWithEmptyReturn("An error occurred while getting favorite with id "+id+".\n");
         }
     }
+    public Response<List<FavoriteDTO>> getFavoriteCounts() {
+        try {
+            List<Object[]> results = favoriteRepository.findFavoriteCounts();
+            List<FavoriteDTO> favoriteCounts = results.stream()
+                    .map(result -> {
+                        FavoriteDTO dto = new FavoriteDTO();
+                        dto.setItemId((Integer) result[0]);
+                        dto.setCount((Long) result[1]);
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+            return Response.newSuccess(favoriteCounts, "Favorite counts retrieved successfully.");
+        } catch (Exception e) {
+            e.fillInStackTrace();
+            LogManager.LogOtherError(e.getMessage() + " An error occurred while getting favorite counts.\n");
+            return Response.newErrorWithEmptyReturn("An error occurred while getting favorite counts.\n");
+        }
+    }
 }
+
