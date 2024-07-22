@@ -122,8 +122,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Response<Void> updateUser(int id,String nickname,String phone,String password,String email) {
+    public Response<Void> updateUser(UserDTO userDTO) {
         try {
+            String nickname = userDTO.getNickname();
+            String email = userDTO.getEmail();
+            String phone = userDTO.getPhone();
+            String password = userDTO.getPassword();
+            int id = userDTO.getId();
             Optional<User> tempUser = userRepository.findById(id);
             if (tempUser.isEmpty()) {
                 return Response.newError("User with id \"" + id + "\" not found");
