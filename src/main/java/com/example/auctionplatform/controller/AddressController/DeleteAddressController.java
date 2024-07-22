@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/address")
-public class deleteAddressController {
+public class DeleteAddressController {
 @Autowired
-public deleteAddressController(AddressService addressService) {
+public DeleteAddressController(AddressService addressService) {
     this.addressService = addressService;
 }
     private final AddressService addressService;

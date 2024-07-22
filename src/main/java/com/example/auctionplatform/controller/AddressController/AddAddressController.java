@@ -7,25 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 功能：更新地址信息
+ * 功能：增加地址
  * 作者：万礼阳
- * 日期：2024/7/20 下午4:09
+ * 日期：2024/7/21 下午3:17
  */
 @RestController
-@RequestMapping("/api/address")
-public class updateAddressController {
-
+@RequestMapping("api/address")
+public class AddAddressController {
     @Autowired
-    public updateAddressController(AddressService addressService) {
+    public AddAddressController(AddressService addressService) {
         this.addressService = addressService;
     }
     private final AddressService addressService;
-
-    @PostMapping("/update/address")
-    public Response<Void> updateAddressById(@RequestBody AddressDTO address) {
-        if(address.getUserId()!=0 && address.getAddressId()!=0){
-        return addressService.updateAddressById(address);
-        }
-        return null;
+    @DeleteMapping("/delete")
+    public Response<Void> delete(@RequestBody AddressDTO addressDTO){
+        return addressService.addNewAddress(addressDTO);
     }
 }

@@ -2,10 +2,19 @@ package com.example.auctionplatform.service;
 import com.example.auctionplatform.dto.UserDTO;
 
 
+
 import java.util.List;
 
 public interface UserService {
 
+
+    int throwTime = 0;
+
+    String secret = "";
+    void setThrowTime(int throwTime);
+    void setSecret(String secret) ;
+    int getThrowTime() ;
+    String getSecret();
     /**
      *新增一个用户，用户的nickname和phone number不能相同
      * @param newUser

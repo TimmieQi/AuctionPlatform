@@ -1,4 +1,4 @@
-package com.example.auctionplatform.controller.AuctionController;
+package com.example.auctionplatform.controller.AuctionItemController;
 
 import com.example.auctionplatform.dto.AuctionItemDTO;
 import com.example.auctionplatform.service.AuctionItemService;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/auction")
-public class addAuctionController {
+public class AddAuctionController {
     @Autowired
-    public addAuctionController(AuctionItemService auctionItemService) {
+    public AddAuctionController(AuctionItemService auctionItemService) {
         this.auctionItemService = auctionItemService;
     }
     private final AuctionItemService auctionItemService;

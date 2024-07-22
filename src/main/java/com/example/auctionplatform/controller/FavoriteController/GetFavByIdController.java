@@ -7,20 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 功能：删除一个收藏
+ * 功能：获取收藏一个商品的信息
  * 作者：万礼阳
- * 日期：2024/7/21 下午2:05
+ * 日期：2024/7/21 下午2:13
  */
-@RequestMapping("/api/Favorite")
 @RestController
-public class deleteFavoriteByIdController {
+@RequestMapping("/api/Favorite")
+public class GetFavByIdController {
     @Autowired
-    public deleteFavoriteByIdController(FavoriteService favoriteService) {
+    public GetFavByIdController(FavoriteService favoriteService) {
         this.favoriteService=favoriteService;
     }
-    private final FavoriteService favoriteService;
-    @DeleteMapping("/delete/id/{id}")
-    public Response<Void> delete(@PathVariable("id") int id) {
-        return favoriteService.deleteFavoriteById(id);
-    }
+    private final FavoriteService  favoriteService;
+    @GetMapping("/fromId/id/{id}")
+    public Response<FavoriteDTO> getFavById(@PathVariable("id") int id) {
+    return favoriteService.getFavoriteById(id);
+}
 }

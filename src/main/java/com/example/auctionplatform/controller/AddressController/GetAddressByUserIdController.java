@@ -1,6 +1,5 @@
 package com.example.auctionplatform.controller.AddressController;
 
-import com.example.auctionplatform.dao.Address;
 import com.example.auctionplatform.dto.AddressDTO;
 import com.example.auctionplatform.service.AddressService;
 import com.example.auctionplatform.service.Response;
@@ -13,20 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 功能：根据地址编号查询地址内容
+ * 功能：根据用户id显示该用户的所有地址
  * 作者：万礼阳
- * 日期：2024/7/21 下午3:20
+ * 日期：2024/7/21 下午3:37
  */
 @RestController
 @RequestMapping("/api/address")
-public class getAddressByIdController {
+public class GetAddressByUserIdController {
     @Autowired
-    public getAddressByIdController(AddressService addressService) {
+    public GetAddressByUserIdController(AddressService addressService) {
         this.addressService = addressService;
     }
     private final AddressService addressService;
-    @GetMapping("/fromId")
-    public Response<Address> getAllAddressControl(@PathVariable int id) {
-        return addressService.getAddress(id);
+    @GetMapping("/fromId/userId/{userId}")
+    public Response<List<AddressDTO>> getAddressByUserIdControl(@PathVariable("userId") int userId) {
+        return addressService.getAddressesByUserId(userId);
     }
 }

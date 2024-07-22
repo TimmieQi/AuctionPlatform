@@ -1,6 +1,5 @@
 package com.example.auctionplatform.service;
 
-import com.example.auctionplatform.controller.SignInUserController;
 import com.example.auctionplatform.converter.UserConverter;
 import com.example.auctionplatform.dao.User;
 import com.example.auctionplatform.dao.UserRepository;
@@ -9,15 +8,36 @@ import com.example.auctionplatform.logger.LogLevel;
 import com.example.auctionplatform.logger.LogManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Value("${jwt.my.throwTime}")
+    private int throwTime;
+    @Value("${jwt.my.secret}")
+    private String secret;
+
+    public void setThrowTime(int throwTime) {
+        this.throwTime = throwTime;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public int getThrowTime() {
+        return throwTime;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository){
