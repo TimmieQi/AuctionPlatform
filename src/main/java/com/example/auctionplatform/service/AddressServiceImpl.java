@@ -84,7 +84,9 @@ public class AddressServiceImpl implements AddressService {
     }
     @Override
     public Response<Void> addNewAddress(AddressDTO newAddress){
-        Address address = AddressConverter.convertAddressDTO(newAddress);
+        Address address = new Address();
+        address.setAddress(newAddress.getAddress());
+        address.setUserId(newAddress.getUserId());
         try {
             addressRepository.save(address);
         }catch (Exception e){
