@@ -24,6 +24,7 @@ public interface UserService {
      */
     Response<Void> deleteUserById(int id);
 
+
     /**
      * 找到对应id
      * @return
@@ -59,4 +60,11 @@ public interface UserService {
      * 给对应id的账户扣除数值为amount的金钱（单位：RMB）
      */
     Response<Void> decreaseMoney(int id, double amount);
+
+    /**
+     * 根据提供的电话号码和密码进行登录
+     */
+    Response<UserDTO> getUserByPhoneAndPassword(String phone, String password);
+
+
 }

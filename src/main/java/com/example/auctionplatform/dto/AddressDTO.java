@@ -1,16 +1,15 @@
 package com.example.auctionplatform.dto;
 
 public class AddressDTO {
-    public static short AUCTION_ITEM_STATE_NOT_CHANGE = -2;
-    private int userId;
+    private Integer userId;
     private String address;
-    private int addressId;
+    private Integer addressId;
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -22,11 +21,11 @@ public class AddressDTO {
         this.address = address;
     }
 
-    public int getAddressId() {
+    public Integer getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(int addressId) {
+    public void setAddressId(Integer addressId) {
         this.addressId = addressId;
     }
 }
