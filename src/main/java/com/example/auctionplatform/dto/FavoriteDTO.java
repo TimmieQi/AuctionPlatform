@@ -30,4 +30,5 @@ public class FavoriteDTO {
     public void setItemId(Integer itemId) {
         this.itemId = itemId;
     }
+
 }

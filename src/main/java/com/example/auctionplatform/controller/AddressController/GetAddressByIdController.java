@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/address")
+@CrossOrigin
 public class GetAddressByIdController {
     @Autowired
     public GetAddressByIdController(AddressService addressService,UserService userService) {

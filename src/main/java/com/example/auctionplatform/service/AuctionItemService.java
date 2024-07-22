@@ -52,4 +52,6 @@ public interface AuctionItemService {
      */
     Response<Void> OfferingPrice(AuctionItemDTO auctionItemDTO);
 
+    Response<Void> addFavourite(int auctionItemId);
+    Response<Void> decreaseFavourite(int auctionItemId);
 }

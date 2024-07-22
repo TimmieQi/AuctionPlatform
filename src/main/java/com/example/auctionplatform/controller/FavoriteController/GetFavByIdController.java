@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/Favorite")
+@CrossOrigin
 public class GetFavByIdController {
     private final FavoriteService favoriteService;
     private final UserService userService;

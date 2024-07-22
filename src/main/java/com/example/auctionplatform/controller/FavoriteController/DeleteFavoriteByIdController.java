@@ -1,9 +1,6 @@
 package com.example.auctionplatform.controller.FavoriteController;
 
-import com.example.auctionplatform.service.FavoriteService;
-import com.example.auctionplatform.service.JWTService;
-import com.example.auctionplatform.service.Response;
-import com.example.auctionplatform.service.UserService;
+import com.example.auctionplatform.service.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +12,16 @@ import org.springframework.web.bind.annotation.*;
  */
 @RequestMapping("/api/Favorite")
 @RestController
+@CrossOrigin
 public class DeleteFavoriteByIdController {
     private final FavoriteService favoriteService;
     private final UserService userService;
+    private final AuctionItemService auctionItemService;
     @Autowired
-    public DeleteFavoriteByIdController(FavoriteService favoriteService, UserService userService) {
+    public DeleteFavoriteByIdController(FavoriteService favoriteService, UserService userService, AuctionItemService auctionItemService) {
         this.favoriteService = favoriteService;
         this.userService = userService;
+        this.auctionItemService = auctionItemService;
     }
 
     @DeleteMapping("/delete/id/{id}")
@@ -29,10 +29,14 @@ public class DeleteFavoriteByIdController {
                                  HttpServletResponse httpServletResponse) {
         try{
             JWTService.parseToken(token,userService.getSecret());
-            return favoriteService.deleteFavoriteById(id);
+            Response<Void> favoriteDTOResponse = favoriteService.deleteFavoriteById(id);
+            if(favoriteDTOResponse.isSuccess()){
+                return auctionItemService.decreaseFavourite(id);
+            }
+            else return favoriteDTOResponse;
         }catch (Exception e) {
             httpServletResponse.setStatus(401);
-            return Response.newErrorWithEmptyReturn("删除收藏夹失败");
+            return Response.newErrorWithEmptyReturn("删除该收藏商品失败");
         }
 
     }

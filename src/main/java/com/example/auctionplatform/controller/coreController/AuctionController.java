@@ -5,15 +5,12 @@ import com.example.auctionplatform.dto.AuctionItemDTO;
 import com.example.auctionplatform.service.AuctionItemService;
 import com.example.auctionplatform.service.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/api/auction")
+@CrossOrigin
 public class AuctionController {
     @Autowired
     public AuctionController(AuctionItemService auctionItemService) {

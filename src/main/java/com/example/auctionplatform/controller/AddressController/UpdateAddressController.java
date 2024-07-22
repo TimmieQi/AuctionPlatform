@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/address")
+@CrossOrigin
 public class UpdateAddressController {
 
     @Autowired
@@ -31,7 +32,7 @@ public class UpdateAddressController {
                                             HttpServletResponse httpServletResponse) {
         try{
             JWTService.parseToken(token,userService.getSecret());
-            if(address.getUserId()!=0 && address.getAddressId()!=0){
+            if(address.getAddressId() != null){
                 return addressService.updateAddressById(address);
             }
             return null;

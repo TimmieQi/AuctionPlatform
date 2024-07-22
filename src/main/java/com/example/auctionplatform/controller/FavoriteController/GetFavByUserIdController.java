@@ -18,6 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/Favorite")
+@CrossOrigin
 public class GetFavByUserIdController {
     private final FavoriteService favoriteService;
     private final UserService userService;
@@ -26,7 +27,6 @@ public class GetFavByUserIdController {
         this.favoriteService = favoriteService;
         this.userService = userService;
     }
-
     @GetMapping("/fromId/Userid/{Userid}")
     public Response<List<FavoriteDTO>> getFavById(@PathVariable("Userid") int Userid, @RequestHeader(name ="Authorization") String token,
                                                   HttpServletResponse httpServletResponse) {
@@ -37,6 +37,5 @@ public class GetFavByUserIdController {
             httpServletResponse.setStatus(401);
             return Response.newErrorWithEmptyReturn("获取收藏夹失败");
         }
-
     }
 }
