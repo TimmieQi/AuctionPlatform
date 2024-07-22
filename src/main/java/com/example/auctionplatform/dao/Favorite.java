@@ -13,7 +13,7 @@ public class Favorite {
     private int userId;
     @Column(name ="item_id")
     private int itemId;
-
+    private long count;
     public int getId() {
         return id;
     }
@@ -36,5 +36,13 @@ public class Favorite {
 
     public void setItemId(int item_Id) {
         this.itemId = item_Id;
+    }
+
+    public long getCount() {
+        return count;
+    }
+
+    public void setCount(long count) {
+        this.count = count;
     }
 }

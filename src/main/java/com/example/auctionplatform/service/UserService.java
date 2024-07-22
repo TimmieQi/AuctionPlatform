@@ -9,7 +9,6 @@ public interface UserService {
 
 
     int throwTime = 0;
-
     String secret = "";
     void setThrowTime(int throwTime);
     void setSecret(String secret) ;

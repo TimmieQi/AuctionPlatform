@@ -1,7 +1,11 @@
 package com.example.auctionplatform.controller.AddressController;
 
+import com.example.auctionplatform.dto.AddressDTO;
 import com.example.auctionplatform.service.AddressService;
+import com.example.auctionplatform.service.JWTService;
 import com.example.auctionplatform.service.Response;
+import com.example.auctionplatform.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,12 +18,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/address")
 public class DeleteAddressController {
 @Autowired
-public DeleteAddressController(AddressService addressService) {
+
+public DeleteAddressController(AddressService addressService, UserService userService) {
     this.addressService = addressService;
+    this.userService =userService;
 }
-    private final AddressService addressService;
+private final AddressService addressService;
+private final UserService userService;
 @DeleteMapping("/delete/id/{id}")
-    public Response<Void> delete(@PathVariable("id") int id) {
-    return addressService.deleteAddressById(id);
+public Response<Void> delete(@PathVariable("id") int id,@RequestHeader(name ="Authorization") String token,
+                                            HttpServletResponse httpServletResponse) {
+    try{
+        JWTService.parseToken(token,userService.getSecret());
+        return addressService.deleteAddressById(id);
+    }catch (Exception e) {
+        httpServletResponse.setStatus(401);
+        return Response.newErrorWithEmptyReturn("删除失败");
+    }
 }
 }
