@@ -118,18 +118,11 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     @Override
     public Response<List<AuctionItemDTO>> getAuctionItemsByName(String name) {
         try {
-            List<AuctionItem> auctionItems = auctionItemRepository.findByName(name);
+            List<AuctionItem> auctionItems = auctionItemRepository.findByNameContains(name);
             if (auctionItems.isEmpty()) {
                 return Response.newErrorWithEmptyReturn("No Auction items found.\n");
             }
-            List<AuctionItemDTO> auctionItemDTOs = new ArrayList<>();
-            for (AuctionItem auctionItem : auctionItems) {
-                AuctionItemDTO newAuctionItemDTO = new AuctionItemDTO();
-                newAuctionItemDTO.setId(auctionItem.getId());
-                newAuctionItemDTO.setImage(auctionItem.getImage());
-                newAuctionItemDTO.setName(auctionItem.getName());
-                auctionItemDTOs.add(newAuctionItemDTO);
-            }
+            List<AuctionItemDTO> auctionItemDTOs = AuctionItemConverter.convertAuctionItems(auctionItems);
             return Response.newSuccess(auctionItemDTOs, "Auction items found.\n");
         } catch (Exception e) {
             e.fillInStackTrace();
