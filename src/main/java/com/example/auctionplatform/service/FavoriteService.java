@@ -10,7 +10,7 @@ public interface FavoriteService {
     /**
      * 这个地方判断ADD的对象是否存在
      */
-    Response<Void> addFavorite(FavoriteDTO newfavoriteDTO);
+    Response<FavoriteDTO> addFavorite(FavoriteDTO newfavoriteDTO);
 
     /**
      * 根据ID获取收藏夹
@@ -35,5 +35,5 @@ public interface FavoriteService {
      * 按照降序排列收藏数
      * @return
      */
-    Response<List<FavoriteDTO>> getFavoriteCounts();
+
 }

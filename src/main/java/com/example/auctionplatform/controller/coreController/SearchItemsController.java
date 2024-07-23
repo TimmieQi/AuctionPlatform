@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class SearchItemsController {
     @Autowired
     public SearchItemsController(AuctionItemService auctionItemService, UserService userService) {

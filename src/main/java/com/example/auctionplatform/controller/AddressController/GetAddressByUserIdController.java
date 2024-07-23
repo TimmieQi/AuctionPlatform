@@ -18,6 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/address")
+@CrossOrigin
 public class GetAddressByUserIdController {
     @Autowired
     public GetAddressByUserIdController(AddressService addressService, UserService userService) {

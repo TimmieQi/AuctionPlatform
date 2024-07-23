@@ -6,7 +6,7 @@ public class FavoriteDTO {
     private Integer id;
     private Integer userId;
     private Integer itemId;
-    private long count;
+
     public Integer getId() {
         return id;
     }
@@ -30,11 +30,5 @@ public class FavoriteDTO {
     public void setItemId(Integer itemId) {
         this.itemId = itemId;
     }
-    public long getCount() {
-        return count;
-    }
 
-    public void setCount(long count) {
-        this.count = count;
-    }
 }

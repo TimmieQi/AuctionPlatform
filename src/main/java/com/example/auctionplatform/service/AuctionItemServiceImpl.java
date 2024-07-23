@@ -151,6 +151,46 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         }
     }
 
+    @Override
+    public Response<Void> addFavourite(int auctionItemId) {
+        try{
+            Optional<AuctionItem> auctionItem = auctionItemRepository.findById(auctionItemId);
+            if (auctionItem.isEmpty()) {
+                return Response.newError("No auction item found.\n");
+            }
+            auctionItem.get().setFavoriteSum(auctionItem.get().getFavoriteSum() + 1);
+            auctionItemRepository.save(auctionItem.get());
+            return Response.newSuccess(null, "favouriteSum added.\n");
+        }catch (Exception e){
+            e.fillInStackTrace();
+            LogManager.LogOtherError(e.getMessage() + "An error occurred while addFavourite.\n");
+            return Response.newError("An error occurred while addFavourite.\n");
+        }
+    }
+
+    @Override
+    public Response<Void> decreaseFavourite(int auctionItemId) {
+        try{
+            Optional<AuctionItem> auctionItem = auctionItemRepository.findById(auctionItemId);
+            if (auctionItem.isEmpty()) {
+                return Response.newError("No auction item found.\n");
+            }
+            if(auctionItem.get().getFavoriteSum() <= 1)
+            {
+                auctionItem.get().setFavoriteSum(0);
+            }
+            else {
+                auctionItem.get().setFavoriteSum(auctionItem.get().getFavoriteSum() - 1);
+            }
+            auctionItemRepository.save(auctionItem.get());
+            return Response.newSuccess(null, "favouriteSum decreased.\n");
+        }catch (Exception e){
+            e.fillInStackTrace();
+            LogManager.LogOtherError(e.getMessage() + "An error occurred while addFavourite.\n");
+            return Response.newError("An error occurred while addFavourite.\n");
+        }
+    }
+
     @Scheduled(fixedRate = 5000) // 每隔5秒处理一次
     public void processAuctionItemQueue() {
         auctionItemQueueMap.forEach((itemId, auctionItemQueue) -> {

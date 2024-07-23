@@ -69,23 +69,26 @@ public class FavoriteServiceImpl implements FavoriteService {
             return Response.newError("An error occurred while deleting favorite with id "+id+".\n");
         }
     }
-    public Response<Void> addFavorite(FavoriteDTO newfavoriteDTO){
+    public Response<FavoriteDTO> addFavorite(FavoriteDTO newfavoriteDTO){
         try {
             List<Favorite> favorite_uid = favoriteRepository.findByUserId(newfavoriteDTO.getUserId());
             if (!favorite_uid.isEmpty()) {
                 for (var favorite : favorite_uid) {
-                    if (favorite.getId() == newfavoriteDTO.getItemId()) {
-                        return Response.newError("Favorite already exists");
+                    if (favorite.getItemId() == newfavoriteDTO.getItemId()) {
+                        return Response.newErrorWithEmptyReturn("Favorite already exists");
                     }
                 }
             }
-            Favorite favorite = FavoriteConverter.convertFavoriteDTO(newfavoriteDTO);
-            favoriteRepository.save(favorite);
-            return Response.newSuccess(null,"Favorite added.");
+            Favorite favorite = new Favorite();
+            favorite.setUserId(newfavoriteDTO.getUserId());
+            favorite.setItemId(newfavoriteDTO.getItemId());
+            favorite = favoriteRepository.save(favorite);
+
+            return Response.newSuccess(FavoriteConverter.convertFavorite(favorite),"Favorite added.");
         }catch (Exception e){
             e.fillInStackTrace();
             LogManager.LogOtherError(e.getMessage() + "An error occurred while adding favorite.\n");
-            return Response.newError("An error occurred while adding favorite.\n");
+            return Response.newErrorWithEmptyReturn("An error occurred while adding favorite.\n");
         }
     }
 
@@ -102,23 +105,6 @@ public class FavoriteServiceImpl implements FavoriteService {
             return Response.newErrorWithEmptyReturn("An error occurred while getting favorite with id "+id+".\n");
         }
     }
-    public Response<List<FavoriteDTO>> getFavoriteCounts() {
-        try {
-            List<Object[]> results = favoriteRepository.findFavoriteCounts();
-            List<FavoriteDTO> favoriteCounts = results.stream()
-                    .map(result -> {
-                        FavoriteDTO dto = new FavoriteDTO();
-                        dto.setItemId((Integer) result[0]);
-                        dto.setCount((Long) result[1]);
-                        return dto;
-                    })
-                    .collect(Collectors.toList());
-            return Response.newSuccess(favoriteCounts, "Favorite counts retrieved successfully.");
-        } catch (Exception e) {
-            e.fillInStackTrace();
-            LogManager.LogOtherError(e.getMessage() + " An error occurred while getting favorite counts.\n");
-            return Response.newErrorWithEmptyReturn("An error occurred while getting favorite counts.\n");
-        }
-    }
+
 }
 

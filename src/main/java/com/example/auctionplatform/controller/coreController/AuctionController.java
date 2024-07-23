@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 
 
-
 @RestController
 @RequestMapping("/api/auction")
+@CrossOrigin
 public class AuctionController {
     @Autowired
     public AuctionController(AuctionItemService auctionItemService, UserService userService) {
