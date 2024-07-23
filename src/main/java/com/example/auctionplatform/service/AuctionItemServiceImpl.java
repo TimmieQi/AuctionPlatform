@@ -319,7 +319,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         try {
             AuctionItem auctionItem = new AuctionItem();
             String description = newAuctionItemDTO.getDescription();
-            if(description.isEmpty())
+            if(!description.isEmpty())
             {
                 auctionItem.setDescription(description);
             }
