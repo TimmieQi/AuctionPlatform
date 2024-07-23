@@ -9,14 +9,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * 功能：上传商品
  * 作者：万礼阳
+ * des,image(not require),iniprice,currprice,uploadtime,auctiontime,uploader_id,name要填
  * 日期：2024/7/21 上午10:23
  */
 @RestController
 @RequestMapping("/api/auction")
 @CrossOrigin
+
 public class AddAuctionController {
     @Autowired
     public AddAuctionController(AuctionItemService auctionItemService, UserService userService) {
@@ -29,7 +33,8 @@ public class AddAuctionController {
     public Response<Void> addAuctionItem(@RequestBody AuctionItemDTO auctionItemDTO, @RequestHeader(name ="Authorization") String token,
                                          HttpServletResponse httpServletResponse) {
         try{
-            JWTService.parseToken(token,userService.getSecret());
+            Map<String,Object> map = JWTService.parseToken(token,userService.getSecret());
+            auctionItemDTO.setId((int)map.get("userId"));
             return auctionItemService.addAuctionItem(auctionItemDTO);
         }catch (Exception e) {
             httpServletResponse.setStatus(401);

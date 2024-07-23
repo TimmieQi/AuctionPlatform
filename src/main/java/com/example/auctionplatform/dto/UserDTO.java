@@ -1,6 +1,6 @@
 package com.example.auctionplatform.dto;
 
-import jakarta.persistence.Column;
+
 
 public class UserDTO {
     private Integer id;
