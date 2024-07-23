@@ -48,7 +48,7 @@ public interface UserService {
     /**
      * 修改对应id的用户的字段，如果对应字段为空或与原来相同，则不修改,并将信息写入日志中
      */
-    Response<Void> updateUser(int id,String nickname,String phone,String password,String email);
+    Response<Void> updateUser(UserDTO userDTO);
 
     /**
      * 提升某个用户的权限到管理员，并将信息写入日志中
