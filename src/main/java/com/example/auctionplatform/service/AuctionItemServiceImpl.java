@@ -3,8 +3,10 @@ package com.example.auctionplatform.service;
 import com.example.auctionplatform.converter.AuctionItemConverter;
 import com.example.auctionplatform.dao.AuctionItem;
 import com.example.auctionplatform.dao.AuctionItemRepository;
+
 import com.example.auctionplatform.dto.AuctionItemDTO;
 
+import com.example.auctionplatform.dto.OrderDTO;
 import com.example.auctionplatform.logger.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -63,6 +65,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     }
 
 
+
     private final Map<Integer, List<AuctionItemDTO>> auctionItemQueueMap = new ConcurrentHashMap<>();
     private static final List<dateWithId> notStartedAuctions = new ArrayList<>();
     private static final List<dateWithId> notFinishedAuctions = new ArrayList<>();
@@ -73,12 +76,13 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         notFinishedAuctions.add(new dateWithId(id, uploadTime, AuctionTime));
     }
     @Autowired
-    public AuctionItemServiceImpl(AuctionItemRepository auctionItemRepository) {
+    public AuctionItemServiceImpl(AuctionItemRepository auctionItemRepository,OrderService orderService) {
         this.auctionItemRepository = auctionItemRepository;
+        this.orderService = orderService;
     }
 
     private final AuctionItemRepository auctionItemRepository;
-
+    private final OrderService orderService;
     private void changeAuctionItemState(int auctionItemId, short state) {
         Optional<AuctionItem> auctionItem = auctionItemRepository.findById(auctionItemId);
         if (auctionItem.isPresent()) {
@@ -268,6 +272,20 @@ public class AuctionItemServiceImpl implements AuctionItemService {
                     AuctionItem auctionItem = auctionItemOptional.get();
                     auctionItem.setState((short) -1);
                     auctionItemRepository.save(auctionItem);
+                    OrderDTO newOrder = new OrderDTO();
+                    if(auctionItem.getUserId() != -1)
+                    {
+                        newOrder.setSaleId(auctionItem.getUploaderId());
+                        newOrder.setBuyId(auctionItem.getUserId());
+                        newOrder.setItemId(auctionItem.getId());
+                        newOrder.setPrice(auctionItem.getCurrPrice());
+                        newOrder.setSaleAdd("Not choose address yet");
+                        newOrder.setBuyAdd("Not choose address yet");
+                        newOrder.setMessage("The merchant has not yet imported the logistics information");
+                        newOrder.setReceived(false);
+                        newOrder.setPayed(false);
+                        orderService.addNewOrder(newOrder);
+                    }
                 }
                 stateIterator.remove();
             }
@@ -341,7 +359,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
             auctionItem.setName(newAuctionItemDTO.getName());
 
             AuctionItem newAuction = auctionItemRepository.save(auctionItem);
-            this.notStartedAuctions.add(new dateWithId(newAuction.getId(),newAuction.getUploadTime(),newAuction.getAuctionTime()));
+            notStartedAuctions.add(new dateWithId(newAuction.getId(),newAuction.getUploadTime(),newAuction.getAuctionTime()));
             return Response.newSuccess(null, "Auction item added.\n");
         } catch (Exception e) {
             e.fillInStackTrace();

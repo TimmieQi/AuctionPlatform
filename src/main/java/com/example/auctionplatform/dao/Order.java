@@ -29,6 +29,17 @@ public class Order {
     @Column(name ="message")
     private String message;
 
+    @Column(name ="isPayed")
+    private boolean isPayed;
+
+    public boolean isPayed() {
+        return isPayed;
+    }
+
+    public void setPayed(boolean payed) {
+        isPayed = payed;
+    }
+
     public int getId() {
         return id;
     }

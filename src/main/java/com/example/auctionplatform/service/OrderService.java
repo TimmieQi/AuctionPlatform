@@ -33,4 +33,8 @@ public interface OrderService {
     Response<Void> updateOrderById(OrderDTO order);
 
     Response<List<OrderDTO>> getOrdersByUserId(int userId);
+
+    Response<Void> changeOrderPayStateById(int id,boolean state);
+
+    Response<Void> changeOrderReceivedStateById(int id,boolean state);
 }

@@ -19,6 +19,7 @@ public class OrderConverter {
         order.setBuyAdd(orderDTO.getBuyAdd());
         order.setReceived(orderDTO.getReceived());
         order.setMessage(orderDTO.getMessage());
+        order.setPayed(orderDTO.getPayed());
         return order;
     }
     public static OrderDTO convertOrder(Order order) {
@@ -32,6 +33,7 @@ public class OrderConverter {
         orderDTO.setBuyAdd(order.getBuyAdd());
         orderDTO.setReceived(order.isReceived());
         orderDTO.setMessage(order.getMessage());
+        orderDTO.setPayed(order.isPayed());
         return orderDTO;
     }
     public static List<Order> convertOrderDTOs(List<OrderDTO> OrderDTOS) {

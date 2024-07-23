@@ -30,7 +30,44 @@ public class OrderServiceImpl implements OrderService {
                     }
                 }
             }
-            Order newOrder = OrderConverter.convertOrderDTO(order);
+            Order newOrder = new Order();
+            if (order.getSaleId() != null) {
+                newOrder.setSaleId(order.getSaleId());
+            }
+            else{
+                return Response.newError("SaleId cannot be empty\n");
+            }
+            if (order.getBuyId() != null) {
+                newOrder.setBuyId(order.getBuyId());
+            }
+            else {
+                return Response.newError("BuyId cannot be empty\n");
+            }
+            if(order.getItemId() != null) {
+                newOrder.setItemId(order.getItemId());
+            }else{
+                return Response.newError("ItemId cannot be empty\n");
+            }
+            if(order.getPrice() != null) {
+                newOrder.setPrice(order.getPrice());
+            }else{
+                return Response.newError("Price cannot be empty\n");
+            }
+            if(order.getSaleAdd() != null){
+                newOrder.setSaleAdd(order.getSaleAdd());
+            }else{
+                return Response.newError("SaleAdd cannot be empty\n");
+            }
+            if(order.getBuyAdd() != null){
+                newOrder.setBuyAdd(order.getBuyAdd());
+            }else{
+                return Response.newError("BuyAdd cannot be empty\n");
+            }
+            if(order.getMessage() != null){
+                newOrder.setMessage(order.getMessage());
+            }else{
+                return Response.newError("Message cannot be empty\n");
+            }
             orderRepository.save(newOrder);
             String message = "Order " + newOrder.getId() + " successfully added\n";
             LogManager.LogOrder(LogLevel.INFO, message);
@@ -145,6 +182,42 @@ public class OrderServiceImpl implements OrderService {
             e.fillInStackTrace();
             LogManager.LogOrder(LogLevel.ERROR, e.getMessage());
             return Response.newErrorWithEmptyReturn("An error occurred while getting orders\n");
+        }
+    }
+
+    @Override
+    public Response<Void> changeOrderPayStateById(int id, boolean state) {
+        try {
+            Optional<Order> optionalOrder = orderRepository.findById(id);
+            if (optionalOrder.isEmpty()) {
+                return Response.newError("Order not found\n");
+            }
+            Order order = optionalOrder.get();
+            order.setPayed(state);
+            orderRepository.save(order);
+            return  Response.newSuccess(null, "Order updated successfully isPayed now :"+state);
+        }catch (Exception e){
+            e.fillInStackTrace();
+            LogManager.LogOrder(LogLevel.ERROR, e.getMessage());
+            return Response.newErrorWithEmptyReturn("An error occurred while changing an order's state\n");
+        }
+    }
+
+    @Override
+    public Response<Void> changeOrderReceivedStateById(int id, boolean state) {
+        try {
+            Optional<Order> optionalOrder = orderRepository.findById(id);
+            if (optionalOrder.isEmpty()) {
+                return Response.newError("Order not found\n");
+            }
+            Order order = optionalOrder.get();
+            order.setReceived(state);
+            orderRepository.save(order);
+            return  Response.newSuccess(null, "Order updated successfully isReceived now :"+state);
+        }catch (Exception e){
+            e.fillInStackTrace();
+            LogManager.LogOrder(LogLevel.ERROR, e.getMessage());
+            return Response.newErrorWithEmptyReturn("An error occurred while changing an order's state\n");
         }
     }
 }

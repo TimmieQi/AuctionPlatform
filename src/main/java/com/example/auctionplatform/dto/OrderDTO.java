@@ -1,6 +1,6 @@
 package com.example.auctionplatform.dto;
 
-import jakarta.persistence.Column;
+
 
 public class OrderDTO {
     private Integer id;
@@ -20,6 +20,16 @@ public class OrderDTO {
     private Boolean isReceived;
 
     private String message;
+
+    private Boolean isPayed;
+
+    public Boolean getPayed() {
+        return isPayed;
+    }
+
+    public void setPayed(Boolean payed) {
+        isPayed = payed;
+    }
 
     public Integer getId() {
         return id;

@@ -98,10 +98,10 @@ public class AddressServiceImpl implements AddressService {
         return Response.newSuccess(null,"Address added successfully!\n");
     }
     @Override
-    public Response<Address> getAddress(int id) {
+    public Response<AddressDTO> getAddress(int id) {
         try {
             Optional<Address> optionalAddress = addressRepository.findById(id);
-            return optionalAddress.map(address -> Response.newSuccess(address, "Address found!\n"))
+            return optionalAddress.map(address -> Response.newSuccess(AddressConverter.convertAddress(address), "Address found!\n"))
                     .orElseGet(() -> Response.newErrorWithEmptyReturn("Address with id "+id+"not found!"));
         }
         catch (Exception e){

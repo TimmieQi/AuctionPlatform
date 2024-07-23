@@ -1,6 +1,6 @@
 package com.example.auctionplatform.service;
 
-import com.example.auctionplatform.dao.Address;
+
 import com.example.auctionplatform.dto.AddressDTO;
 
 
@@ -13,7 +13,7 @@ public interface AddressService  {
     /**
      * 和删除一样，判断id是否存在，存在就用get方法获取
      */
-    Response<Address> getAddress(int id);
+    Response<AddressDTO> getAddress(int id);
 
     Response<List<AddressDTO>> getAllAddresses();
 
