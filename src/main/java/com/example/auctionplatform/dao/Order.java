@@ -3,7 +3,7 @@ package com.example.auctionplatform.dao;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name ="order")
+@Table(name ="orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class Order {
     @Column(name ="message")
     private String message;
 
-    @Column(name ="isPayed")
+    @Column(name ="isPaid")
     private boolean isPayed;
 
     public boolean isPayed() {

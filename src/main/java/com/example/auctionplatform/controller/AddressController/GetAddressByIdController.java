@@ -2,6 +2,7 @@ package com.example.auctionplatform.controller.AddressController;
 
 import com.example.auctionplatform.dao.Address;
 import com.example.auctionplatform.dao.User;
+import com.example.auctionplatform.dto.AddressDTO;
 import com.example.auctionplatform.service.AddressService;
 import com.example.auctionplatform.service.JWTService;
 import com.example.auctionplatform.service.Response;
@@ -27,8 +28,8 @@ public class GetAddressByIdController {
     private final UserService userService;
     private final AddressService addressService;
     @GetMapping("/fromId/Id/{id}")
-    public Response<Address> getAllAddressControl(@PathVariable int id, @RequestHeader(name ="Authorization") String token,
-                                                  HttpServletResponse httpServletResponse) {
+    public Response<AddressDTO> getAllAddressControl(@PathVariable int id, @RequestHeader(name ="Authorization") String token,
+                                                     HttpServletResponse httpServletResponse) {
         try{
             JWTService.parseToken(token,userService.getSecret());
             return addressService.getAddress(id);
