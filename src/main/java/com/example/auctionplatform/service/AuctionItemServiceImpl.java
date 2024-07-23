@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 /*
@@ -25,8 +26,52 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class AuctionItemServiceImpl implements AuctionItemService {
-    private final Map<Integer, List<AuctionItemDTO>> auctionItemQueueMap = new ConcurrentHashMap<>();
+    private class dateWithId{
+        int id;
+        Date uploadTime;
+        Date AuctionTime;
 
+        public Date getAuctionTime() {
+            return AuctionTime;
+        }
+
+        public void setAuctionTime(Date auctionTime) {
+            AuctionTime = auctionTime;
+        }
+
+        public Date getUploadTime() {
+            return uploadTime;
+        }
+
+        public void setUploadTime(Date uploadTime) {
+            this.uploadTime = uploadTime;
+        }
+
+        public dateWithId(int id, Date uploadTime, Date AuctionTime) {
+            this.id = id;
+            this.uploadTime = uploadTime;
+            this.AuctionTime = AuctionTime;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+    }
+
+
+    private final Map<Integer, List<AuctionItemDTO>> auctionItemQueueMap = new ConcurrentHashMap<>();
+    private static final List<dateWithId> notStartedAuctions = new ArrayList<>();
+    private static final List<dateWithId> notFinishedAuctions = new ArrayList<>();
+    public void insert2notStartedAuction(int id, Date uploadTime, Date AuctionTime) {
+        notStartedAuctions.add(new dateWithId(id, uploadTime, AuctionTime));
+    }
+    public void insert2notFinishedAuction(int id, Date uploadTime, Date AuctionTime) {
+        notFinishedAuctions.add(new dateWithId(id, uploadTime, AuctionTime));
+    }
     @Autowired
     public AuctionItemServiceImpl(AuctionItemRepository auctionItemRepository) {
         this.auctionItemRepository = auctionItemRepository;
@@ -34,6 +79,13 @@ public class AuctionItemServiceImpl implements AuctionItemService {
 
     private final AuctionItemRepository auctionItemRepository;
 
+    private void changeAuctionItemState(int auctionItemId, short state) {
+        Optional<AuctionItem> auctionItem = auctionItemRepository.findById(auctionItemId);
+        if (auctionItem.isPresent()) {
+            auctionItem.get().setState(state);
+            auctionItemRepository.save(auctionItem.get());
+        }
+    }
     @Override
     public Response<Void> updateAuctionItem(AuctionItemDTO newAuctionItemDTO) {
         try {
@@ -190,9 +242,41 @@ public class AuctionItemServiceImpl implements AuctionItemService {
             return Response.newError("An error occurred while addFavourite.\n");
         }
     }
+//Scheduled(cron = "0 0 0/1 * * ?")
+    @Scheduled(fixedRate = 30000)
+    public void processAuctionState(){
+        System.out.println("Processing auction state...");
+        Date now = new Date();
+        for(Iterator<dateWithId> stateIterator = notStartedAuctions.iterator(); stateIterator.hasNext();){
+           dateWithId state = stateIterator.next();
+            if(state.getUploadTime().before(now)){
+                Optional<AuctionItem> auctionItemOptional = auctionItemRepository.findById(state.getId());
+                if(auctionItemOptional.isPresent()) {
+                    AuctionItem auctionItem = auctionItemOptional.get();
+                    auctionItem.setState((short) 1);
+                    auctionItemRepository.save(auctionItem);
+                    notFinishedAuctions.add(state);
+                }
+                stateIterator.remove();
+            }
+        }
+        for(Iterator<dateWithId> stateIterator = notFinishedAuctions.iterator(); stateIterator.hasNext();){
+            dateWithId state = stateIterator.next();
+            if(state.getAuctionTime().before(now)){
+                Optional<AuctionItem> auctionItemOptional = auctionItemRepository.findById(state.getId());
+                if(auctionItemOptional.isPresent()) {
+                    AuctionItem auctionItem = auctionItemOptional.get();
+                    auctionItem.setState((short) -1);
+                    auctionItemRepository.save(auctionItem);
+                }
+                stateIterator.remove();
+            }
+        }
+    }
 
     @Scheduled(fixedRate = 5000) // 每隔5秒处理一次
     public void processAuctionItemQueue() {
+        System.out.println("Processing auction item queue...");
         auctionItemQueueMap.forEach((itemId, auctionItemQueue) -> {
             if (!auctionItemQueue.isEmpty()) {
                 Optional<AuctionItem> optionalAuctionItem = auctionItemRepository.findById(itemId);
@@ -233,8 +317,31 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     @Override
     public Response<Void> addAuctionItem(AuctionItemDTO newAuctionItemDTO) {
         try {
-            AuctionItem AuctionItem = AuctionItemConverter.convertAuctionItemDTO(newAuctionItemDTO);
-            auctionItemRepository.save(AuctionItem);
+            AuctionItem auctionItem = new AuctionItem();
+            String description = newAuctionItemDTO.getDescription();
+            if(description.isEmpty())
+            {
+                auctionItem.setDescription(description);
+            }
+
+            double initialPrice = newAuctionItemDTO.getInitialPrice();
+            if(initialPrice <= 0.01f){
+                return Response.newErrorWithEmptyReturn("Initial price cannot be less than 0.01\n");
+            }else {
+                auctionItem.setInitialPrice(initialPrice);
+            }
+            Object image = newAuctionItemDTO.getImage();
+            if(image!=null){
+                auctionItem.setImage(image.toString());
+            }
+            auctionItem.setState((short) 0);
+            auctionItem.setUploadTime(newAuctionItemDTO.getUploadTime());
+            auctionItem.setAuctionTime(newAuctionItemDTO.getAuctionTime());
+            auctionItem.setUploaderId(newAuctionItemDTO.getUploaderId());
+            auctionItem.setName(newAuctionItemDTO.getName());
+
+            AuctionItem newAuction = auctionItemRepository.save(auctionItem);
+            this.notStartedAuctions.add(new dateWithId(newAuction.getId(),newAuction.getUploadTime(),newAuction.getAuctionTime()));
             return Response.newSuccess(null, "Auction item added.\n");
         } catch (Exception e) {
             e.fillInStackTrace();
