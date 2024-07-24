@@ -1,14 +1,13 @@
 package com.example.auctionplatform.controller.FavoriteController;
 
+import com.example.auctionplatform.dto.AuctionItemDTO;
 import com.example.auctionplatform.dto.FavoriteDTO;
-import com.example.auctionplatform.service.FavoriteService;
-import com.example.auctionplatform.service.JWTService;
-import com.example.auctionplatform.service.Response;
-import com.example.auctionplatform.service.UserService;
+import com.example.auctionplatform.service.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,17 +21,32 @@ import java.util.List;
 public class GetFavByUserIdController {
     private final FavoriteService favoriteService;
     private final UserService userService;
+    private final AuctionItemService auctionItemService;
     @Autowired
-    public GetFavByUserIdController(FavoriteService favoriteService, UserService userService) {
+    public GetFavByUserIdController(FavoriteService favoriteService, UserService userService, AuctionItemService auctionItemService) {
         this.favoriteService = favoriteService;
         this.userService = userService;
+        this.auctionItemService = auctionItemService;
+
     }
     @GetMapping("/fromId/Userid/{Userid}")
-    public Response<List<FavoriteDTO>> getFavById(@PathVariable("Userid") int Userid, @RequestHeader(name ="Authorization") String token,
+    public Response<List<AuctionItemDTO>> getFavById(@PathVariable("Userid") int Userid, @RequestHeader(name ="Authorization") String token,
                                                   HttpServletResponse httpServletResponse) {
         try{
             JWTService.parseToken(token,userService.getSecret());
-            return favoriteService.getFavoritesByUserId(Userid);
+            Response<List<FavoriteDTO>>  favorites = favoriteService.getFavoritesByUserId(Userid);
+
+            if(!favorites.isSuccess()){
+                return Response.newErrorWithEmptyReturn("favorites not found");
+            }
+            List<AuctionItemDTO> auctionItemDTOList=new ArrayList<>();
+            for(var favoriteDTO : favorites.getData()) {
+                Response<AuctionItemDTO> response = auctionItemService.getAuctionItem(favoriteDTO.getItemId());
+                if(response.isSuccess()){
+                    auctionItemDTOList.add(response.getData());
+                }
+            }
+            return Response.newSuccess(auctionItemDTOList,"favorites found");
         }catch (Exception e) {
             httpServletResponse.setStatus(401);
             return Response.newErrorWithEmptyReturn("获取收藏夹失败");

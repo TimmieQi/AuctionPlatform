@@ -249,7 +249,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
 //Scheduled(cron = "0 0 0/1 * * ?")
     @Scheduled(fixedRate = 30000)
     public void processAuctionState(){
-        System.out.println("Processing auction state...");
+       // System.out.println("Processing auction state...");
         Date now = new Date();
         for(Iterator<dateWithId> stateIterator = notStartedAuctions.iterator(); stateIterator.hasNext();){
            dateWithId state = stateIterator.next();
@@ -294,7 +294,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
 
     @Scheduled(fixedRate = 5000) // 每隔5秒处理一次
     public void processAuctionItemQueue() {
-        System.out.println("Processing auction item queue...");
+       // System.out.println("Processing auction item queue...");
         auctionItemQueueMap.forEach((itemId, auctionItemQueue) -> {
             if (!auctionItemQueue.isEmpty()) {
                 Optional<AuctionItem> optionalAuctionItem = auctionItemRepository.findById(itemId);
